@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feiertags-Verfügbarkeit planen</title>
+    <!-- Lade Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Spezifische Schriftart und Hintergrund für Ästhetik */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#DC2626', /* Rot für Weihnachten/Feiertage */
+                        'secondary': '#16A34A', /* Grün */
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen p-4 sm:p-8 flex justify-center items-start">
+
+    <div id="app" class="w-full max-w-2xl bg-white shadow-2xl rounded-xl p-6 sm:p-10 my-8">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-primary mb-2">Verfügbarkeitsplaner</h1>
+        <p class="text-gray-600 mb-8">Tragen Sie Ihre Verfügbarkeit für die kommenden Wochenenden und Feiertage ein. Mehrere Einträge sind möglich.</p>
+
+        <!-- Formular für die Eingabe des Namens -->
+        <div class="mb-8">
+            <label for="userName" class="block text-sm font-medium text-gray-700 mb-1">Ihr Name / Teammitglied</label>
+            <input type="text" id="userName" placeholder="Max Mustermann"
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150" required>
+        </div>
+        
+        <!-- Ziel-E-Mail-Adresse wurde entfernt und im JS hartcodiert -->
+
+
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Ihre Verfügbarkeits-Slots
+        </h2>
+
+        <!-- Container für Verfügbarkeitseinträge -->
+        <div id="availabilityContainer" class="space-y-4 mb-6">
+            <!-- Einträge werden hier dynamisch eingefügt -->
+        </div>
+
+        <!-- Button zum Hinzufügen eines neuen Eintrags -->
+        <button onclick="addAvailabilitySlot()"
+                class="w-full sm:w-auto px-4 py-2 mb-8 bg-secondary text-white font-semibold rounded-lg hover:bg-green-700 transition duration-150 shadow-md flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            Slot hinzufügen
+        </button>
+
+        <!-- Sende-Button mit Pflicht-Checkbox -->
+        <div class="pt-6 border-t border-gray-200">
+            <!-- Pflicht-Checkbox -->
+            <div class="flex items-start mb-4">
+                <input type="checkbox" id="mandatoryConfirmation" class="h-5 w-5 text-primary rounded border-gray-300 focus:ring-primary mt-1">
+                <label for="mandatoryConfirmation" class="ml-3 text-sm font-medium text-gray-700 select-none">
+                    Mit dem Senden der Verfügbarkeit wird eine 100%-ige Zusage getroffen!
+                </label>
+            </div>
+            
+            <button onclick="generateMailtoLink()"
+                    class="w-full px-6 py-3 bg-primary text-white text-lg font-bold rounded-lg hover:bg-red-700 transition duration-150 shadow-xl flex items-center justify-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                Verfügbarkeit verbindlich senden
+            </button>
+            <p id="messageBox" class="text-center mt-4 p-3 bg-yellow-100 text-yellow-800 rounded-lg hidden"></p>
+        </div>
+    </div>
+
+    <script>
+        // Array von vordefinierten Feiertagen/relevanten Tagen
+        const specialDates = [
+            // NEUE NOVEMBER WOCHENENDEN
+            { date: '2025-11-08', label: '08. Nov (Wochenende vor Weihnachten)' },
+            { date: '2025-11-09', label: '09. Nov (Wochenende vor Weihnachten)' },
+            { date: '2025-11-15', label: '15. Nov (Wochenende vor Weihnachten)' },
+            { date: '2025-11-16', label: '16. Nov (Wochenende vor Weihnachten)' },
+            // BESTEHENDE DATEN
+            { date: '2025-12-06', label: '06. Dez (Samstag vor Weihnachten)' },
+            { date: '2025-12-07', label: '07. Dez (Sonntag vor Weihnachten)' },
+            { date: '2025-12-13', label: '13. Dez (Samstag vor Weihnachten)' },
+            { date: '2025-12-14', label: '14. Dez (Sonntag vor Weihnachten)' },
+            { date: '2025-12-20', label: '20. Dez (Samstag vor Weihnachten)' }, 
+            { date: '2025-12-21', label: '21. Dez (Sonntag vor Weihnachten)' }, 
+            { date: '2025-12-24', label: '24. Dez (Heiligabend)' },
+            { date: '2025-12-25', label: '25. Dez (1. Weihnachtstag)' },
+            { date: '2025-12-26', label: '26. Dez (2. Weihnachtstag)' },
+            { date: '2025-12-31', label: '31. Dez (Silvester)' },
+            { date: '2026-01-01', label: '01. Jan (Neujahr)' },
+        ];
+
+        /**
+         * Erstellt das HTML für die Datums-Auswahloptionen.
+         * @returns {string} HTML-String der <option> Elemente.
+         */
+        function createDateOptions() {
+            let options = '<option value="" disabled selected>Datum auswählen...</option>';
+            specialDates.forEach(d => {
+                options += `<option value="${d.date}">${d.label} (${d.date.slice(5)})</option>`;
+            });
+            return options;
+        }
+
+        /**
+         * Fügt einen neuen Verfügbarkeits-Slot zum Container hinzu.
+         */
+        function addAvailabilitySlot() {
+            const container = document.getElementById('availabilityContainer');
+            const slotId = 'slot-' + Date.now();
+            
+            const slotHtml = `
+                <div id="${slotId}" class="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col sm:flex-row gap-3 items-center">
+                    
+                    <!-- Datums-Auswahl -->
+                    <div class="w-full sm:w-1/3">
+                        <label class="block text-xs font-medium text-gray-500 mb-0.5">Tag auswählen</label>
+                        <select class="date-select w-full p-2 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150" required>
+                            ${createDateOptions()}
+                        </select>
+                    </div>
+
+                    <!-- Startzeit (Von) -->
+                    <div class="w-full sm:w-1/4">
+                        <label class="block text-xs font-medium text-gray-500 mb-0.5">Von</label>
+                        <input type="time" value="10:00" class="start-time w-full p-2 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150" required>
+                    </div>
+
+                    <!-- Endzeit (Bis) -->
+                    <div class="w-full sm:w-1/4">
+                        <label class="block text-xs font-medium text-gray-500 mb-0.5">Bis</label>
+                        <input type="time" value="18:00" class="end-time w-full p-2 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150" required>
+                    </div>
+
+                    <!-- Löschen-Button -->
+                    <button onclick="removeAvailabilitySlot('${slotId}')"
+                            class="w-full sm:w-auto p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-150 flex-shrink-0">
+                        <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', slotHtml);
+        }
+
+        /**
+         * Entfernt einen Verfügbarkeits-Slot anhand seiner ID.
+         * @param {string} slotId - Die ID des zu entfernenden Slots.
+         */
+        function removeAvailabilitySlot(slotId) {
+            const element = document.getElementById(slotId);
+            if (element) {
+                element.remove();
+            }
+        }
+
+        /**
+         * Zeigt eine Meldung in der Message Box an.
+         * @param {string} message - Der anzuzeigende Text.
+         * @param {string} type - 'success', 'error', 'info'.
+         */
+        function showMessage(message, type = 'info') {
+            const box = document.getElementById('messageBox');
+            box.textContent = message;
+            box.className = 'text-center mt-4 p-3 rounded-lg block';
+            if (type === 'error') {
+                box.classList.add('bg-red-100', 'text-red-800');
+            } else if (type === 'success') {
+                box.classList.add('bg-green-100', 'text-green-800');
+            } else { // info
+                box.classList.add('bg-yellow-100', 'text-yellow-800');
+            }
+            setTimeout(() => box.classList.add('hidden'), 5000);
+            box.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Sammelt alle Daten und generiert den mailto:-Link.
+         */
+        function generateMailtoLink() {
+            const userName = document.getElementById('userName').value.trim();
+            // Neue, kommagetrennte Ziel-E-Mail-Adressen
+            const targetEmail = 'lue-heim@web.de,michael.lueders@taxi-pfeiffer-blankenburg.de'; 
+            const slots = document.getElementById('availabilityContainer').children;
+            const entries = [];
+
+            // 1. Zusage-Checkbox prüfen
+            const confirmationCheckbox = document.getElementById('mandatoryConfirmation');
+            if (!confirmationCheckbox.checked) {
+                return showMessage('Bitte bestätigen Sie die Zusage, indem Sie das Kästchen ankreuzen.', 'error');
+            }
+
+
+            if (!userName) {
+                return showMessage('Bitte geben Sie zuerst Ihren Namen ein.', 'error');
+            }
+
+            if (slots.length === 0) {
+                return showMessage('Bitte fügen Sie mindestens einen Verfügbarkeits-Slot hinzu.', 'error');
+            }
+
+            // Daten sammeln
+            let allValid = true;
+            Array.from(slots).forEach(slot => {
+                const dateElement = slot.querySelector('.date-select');
+                const startElement = slot.querySelector('.start-time');
+                const endElement = slot.querySelector('.end-time');
+
+                const date = dateElement.value;
+                const start = startElement.value;
+                const end = endElement.value;
+
+                if (!date || !start || !end) {
+                    allValid = false;
+                }
+
+                entries.push({ date, start, end });
+            });
+
+            if (!allValid) {
+                return showMessage('Bitte wählen Sie für jeden Slot ein Datum und eine Uhrzeit (von/bis) aus.', 'error');
+            }
+            
+            // Textkörper der E-Mail erstellen
+            let bodyText = `Sehr geehrte Damen und Herren, anbei erhalten Sie meine Daten über die Verfügbarkeit zur vorweihnachtszeit, weihnachten, inkl. feiertage, silvester und neujahr.\n\n`; // NEUE EINLEITUNG
+            bodyText += `Verfügbarkeit von: ${userName}\n\n`;
+            bodyText += "---------------------------------------\n";
+
+            entries.sort((a, b) => new Date(a.date) - new Date(b.date)); // Nach Datum sortieren
+
+            entries.forEach(entry => {
+                // Konvertiere das Datum ins Format DD, MM, YYYY
+                const dateObj = new Date(entry.date + 'T00:00:00');
+                const day = String(dateObj.getUTCDate()).padStart(2, '0');
+                const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+                const year = dateObj.getUTCFullYear();
+                
+                const customDate = `${day}, ${month}, ${year}`;
+
+                bodyText += `${customDate}: Von ${entry.start} Uhr bis ${entry.end} Uhr\n`;
+            });
+
+            bodyText += "\n---------------------------------------\n";
+            bodyText += "Bitte übernehmen Sie diese Zeiten in den Schichtplan.\n\nMit freundlichen Grüßen,\nIhr Teammitglied";
+
+
+            // Mailto-Link generieren
+            const subject = encodeURIComponent(`Verfügbarkeit Feiertage/Wochenenden - ${userName}`);
+            const body = encodeURIComponent(bodyText);
+            const mailtoLink = `mailto:${encodeURIComponent(targetEmail)}?subject=${subject}&body=${body}`;
+
+            // Link öffnen und Bestätigung zeigen
+            window.location.href = mailtoLink;
+            showMessage('Ihre E-Mail wurde im E-Mail-Client vorbereitet. Bitte senden Sie diese ab! (Sie müssen die Zusage bestätigt haben)', 'success');
+        }
+
+        // Fügen Sie beim Laden der Seite einen initialen Slot hinzu
+        window.onload = () => {
+            addAvailabilitySlot();
+            // Optional: Setzen Sie einen Fokus auf den Namen
+            document.getElementById('userName').focus();
+        };
+
+    </script>
+</body>
+</html>
