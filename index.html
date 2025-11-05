@@ -12,6 +12,19 @@
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
         }
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
     </style>
     <script>
         tailwind.config = {
@@ -20,6 +33,7 @@
                     colors: {
                         'primary': '#DC2626', /* Rot für Weihnachten/Feiertage */
                         'secondary': '#16A34A', /* Grün */
+                        'teams': '#4C70F5' /* Teams Indigo/Blau */
                     },
                 }
             }
@@ -30,17 +44,22 @@
 
     <div id="app" class="w-full max-w-2xl bg-white shadow-2xl rounded-xl p-6 sm:p-10 my-8">
         <h1 class="text-3xl sm:text-4xl font-extrabold text-primary mb-2">Verfügbarkeitsplaner</h1>
-        <p class="text-gray-600 mb-8">Tragen Sie Ihre Verfügbarkeit für die kommenden Wochenenden und Feiertage ein. Mehrere Einträge sind möglich.</p>
+        <p class="text-gray-600 mb-8">Tragen Sie Ihre Verfügbarkeit für die kommenden Wochenenden und Feiertage ein.</p>
 
-        <!-- Formular für die Eingabe des Namens -->
-        <div class="mb-8">
-            <label for="userName" class="block text-sm font-medium text-gray-700 mb-1">Ihr Name</label>
-            <input type="text" id="userName" placeholder="Bitte Vorname, Name eingeben"
+        <!-- Eigene Eingaben -->
+        <!-- Der Abschnitt ist jetzt das einzige Eingabefeld oben -->
+        <div class="mb-6 border-b pb-4 border-gray-100">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                Ihr Name
+            </h2>
+            <label for="userName" class="block text-sm font-medium text-gray-700 mb-1 sr-only">Ihr Name / Teammitglied</label>
+            <input type="text" id="userName" placeholder="Max Mustermann"
                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150" required>
+            <p class="text-xs text-gray-500 mt-1">Dieser Name wird in der Teams-Nachricht verwendet.</p>
         </div>
         
-        <!-- Ziel-E-Mail-Adresse wurde entfernt und im JS hartcodiert -->
-
+        <!-- Empfänger-Informationen (ENTFERNT) -->
 
         <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
             <svg class="w-6 h-6 mr-2 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -69,7 +88,8 @@
                 </label>
             </div>
             
-            <button onclick="generateMailtoLink()"
+            <!-- Der Button ruft nun showShareOptions() auf -->
+            <button onclick="showShareOptions()"
                     class="w-full px-6 py-3 bg-primary text-white text-lg font-bold rounded-lg hover:bg-red-700 transition duration-150 shadow-xl flex items-center justify-center">
                 <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 Verfügbarkeit verbindlich senden
@@ -77,6 +97,29 @@
             <p id="messageBox" class="text-center mt-4 p-3 bg-yellow-100 text-yellow-800 rounded-lg hidden"></p>
         </div>
     </div>
+
+    <!-- Modal für die Auswahl des Sendevorgangs (JETZT NUR TEAMS) -->
+    <div id="shareModal" class="modal-overlay hidden">
+        <div class="bg-white rounded-lg shadow-2xl p-6 w-11/12 max-w-md transform transition-all duration-300 scale-100">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Übermittlung starten</h3>
+            <p class="text-gray-600 mb-6">Ihre Verfügbarkeit wird als Teams-Nachricht vorbereitet.</p>
+
+            <div class="space-y-4">
+                <!-- Teams Button -->
+                <button onclick="sendViaTeams()"
+                        class="w-full px-4 py-3 bg-teams text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-150 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12c0 3.397 1.344 6.471 3.535 8.793l.002.001.002.001L12 24l8.461-3.205c2.191-2.322 3.535-5.396 3.535-8.794C24 5.373 18.627 0 12 0zm-5.45 15.65h-2.1V8.35h2.1v7.3zm4.55 0h-2.1V8.35h2.1v7.3zm4.55 0h-2.1V8.35h2.1v7.3z"/></svg>
+                    Per Teams-Chat senden (Empfänger manuell wählen)
+                </button>
+            </div>
+            
+            <button onclick="document.getElementById('shareModal').classList.add('hidden')"
+                    class="w-full mt-4 px-4 py-2 text-gray-500 font-semibold rounded-lg border border-gray-300 hover:bg-gray-100 transition duration-150">
+                Abbrechen
+            </button>
+        </div>
+    </div>
+
 
     <script>
         // Array von vordefinierten Feiertagen/relevanten Tagen
@@ -99,18 +142,53 @@
             { date: '2025-12-31', label: '31. Dez (Silvester)' },
             { date: '2026-01-01', label: '01. Jan (Neujahr)' },
         ];
+        
+        // Globale Variable, um den erzeugten Text zu speichern
+        let sharedBodyText = '';
 
         /**
-         * Erstellt das HTML für die Datums-Auswahloptionen.
+         * Hilfsfunktion, um das heutige Datum auf Mitternacht zu normalisieren (YYYY-MM-DD string oder Date object at 00:00:00).
+         */
+        function getTodayNormalized() {
+            const today = new Date();
+            // Zeit auf 00:00:00 setzen, um konsistente Vergleiche nur basierend auf dem Datum zu gewährleisten.
+            today.setHours(0, 0, 0, 0); 
+            return today;
+        }
+
+        /**
+         * Filtert die specialDates, um nur Daten zu behalten, die heute oder in der Zukunft liegen.
+         * @returns {Array} Gefilterte Array von Datumsobjekten.
+         */
+        function getFutureDates() {
+            const todayNormalized = getTodayNormalized().getTime();
+
+            return specialDates.filter(d => {
+                // Erstelle ein Date-Objekt vom Slot-Datum
+                // Der 'T00:00:00' Zusatz stellt sicher, dass das Datum als UTC-Mitternacht interpretiert wird, 
+                // um Zeitzonenprobleme beim Vergleich zu vermeiden.
+                const slotDate = new Date(d.date + 'T00:00:00');
+                
+                // Ein Slot ist gültig, wenn sein Datum größer oder gleich dem heutigen Datum ist (getTime() in Millisekunden).
+                return slotDate.getTime() >= todayNormalized;
+            });
+        }
+
+
+        /**
+         * Erstellt das HTML für die Datums-Auswahloptionen aus den ZUKÜNFTIGEN Daten.
          * @returns {string} HTML-String der <option> Elemente.
          */
         function createDateOptions() {
             let options = '<option value="" disabled selected>Datum auswählen...</option>';
-            specialDates.forEach(d => {
+            const futureDates = getFutureDates(); // Verwende die gefilterte Liste
+
+            futureDates.forEach(d => {
                 options += `<option value="${d.date}">${d.label} (${d.date.slice(5)})</option>`;
             });
             return options;
         }
+
 
         /**
          * Fügt einen neuen Verfügbarkeits-Slot zum Container hinzu.
@@ -179,36 +257,31 @@
             } else { // info
                 box.classList.add('bg-yellow-100', 'text-yellow-800');
             }
+            // Zeigt die Box an und verbirgt sie nach 5 Sekunden
+            box.classList.remove('hidden'); 
             setTimeout(() => box.classList.add('hidden'), 5000);
             box.scrollIntoView({ behavior: 'smooth' });
         }
-
+        
         /**
-         * Sammelt alle Daten und generiert den mailto:-Link.
+         * Sammelt und formatiert die Verfügbarkeitsdaten.
+         * @returns {string|null} Den formatierten Textkörper oder null, wenn Fehler vorliegen.
          */
-        function generateMailtoLink() {
+        function getFormattedBodyText() {
             const userName = document.getElementById('userName').value.trim();
-            // Neue, kommagetrennte Ziel-E-Mail-Adressen
-            const targetEmail = 'lue-heim@web.de,michael.lueders@taxi-pfeiffer-blankenburg.de'; 
             const slots = document.getElementById('availabilityContainer').children;
             const entries = [];
-
-            // 1. Zusage-Checkbox prüfen
-            const confirmationCheckbox = document.getElementById('mandatoryConfirmation');
-            if (!confirmationCheckbox.checked) {
-                return showMessage('Bitte bestätigen Sie die Zusage, indem Sie das Kästchen ankreuzen.', 'error');
-            }
-
-
+            
+            // Grundlegende Validierung
             if (!userName) {
-                return showMessage('Bitte geben Sie zuerst Ihren Namen ein.', 'error');
+                showMessage('Bitte geben Sie zuerst Ihren Namen/Teammitglied ein.', 'error');
+                return null;
             }
-
             if (slots.length === 0) {
-                return showMessage('Bitte fügen Sie mindestens einen Verfügbarkeits-Slot hinzu.', 'error');
+                showMessage('Bitte fügen Sie mindestens einen Verfügbarkeits-Slot hinzu.', 'error');
+                return null;
             }
 
-            // Daten sammeln
             let allValid = true;
             Array.from(slots).forEach(slot => {
                 const dateElement = slot.querySelector('.date-select');
@@ -222,16 +295,19 @@
                 if (!date || !start || !end) {
                     allValid = false;
                 }
-
                 entries.push({ date, start, end });
             });
 
             if (!allValid) {
-                return showMessage('Bitte wählen Sie für jeden Slot ein Datum und eine Uhrzeit (von/bis) aus.', 'error');
+                showMessage('Bitte wählen Sie für jeden Slot ein Datum und eine Uhrzeit (von/bis) aus.', 'error');
+                return null;
             }
             
-            // Textkörper der E-Mail erstellen
-            let bodyText = `Sehr geehrte Damen und Herren, anbei erhalten Sie meine Daten über die Verfügbarkeit zur vorweihnachtszeit, weihnachten, inkl. feiertage, silvester und neujahr.\n\n`; // NEUE EINLEITUNG
+            // Textkörper erstellen (wird nur für Teams verwendet)
+            // HINWEIS: Wichtig, da Teams-Empfänger manuell gewählt wird.
+            let bodyText = `*** WICHTIG: Bitte senden Sie diese Nachricht an Ihren Vorgesetzten/Teamleiter! ***\n\n`;
+            
+            bodyText += `Sehr geehrte Damen und Herren, anbei erhalten Sie meine Daten über die Verfügbarkeit zur vorweihnachtszeit, weihnachten, inkl. feiertage, silvester und neujahr.\n\n`;
             bodyText += `Verfügbarkeit von: ${userName}\n\n`;
             bodyText += "---------------------------------------\n";
 
@@ -251,17 +327,45 @@
 
             bodyText += "\n---------------------------------------\n";
             bodyText += "Bitte übernehmen Sie diese Zeiten in den Schichtplan.\n\nMit freundlichen Grüßen,\nIhr Teammitglied";
-
-
-            // Mailto-Link generieren
-            const subject = encodeURIComponent(`Verfügbarkeit Feiertage/Wochenenden - ${userName}`);
-            const body = encodeURIComponent(bodyText);
-            const mailtoLink = `mailto:${encodeURIComponent(targetEmail)}?subject=${subject}&body=${body}`;
-
-            // Link öffnen und Bestätigung zeigen
-            window.location.href = mailtoLink;
-            showMessage('Ihre E-Mail wurde im E-Mail-Client vorbereitet. Bitte senden Sie diese ab! (Sie müssen die Zusage bestätigt haben)', 'success');
+            
+            return bodyText;
         }
+
+
+        /**
+         * Führt die Validierung durch und zeigt das Modal an, wenn alle Daten korrekt sind.
+         */
+        function showShareOptions() {
+            const confirmationCheckbox = document.getElementById('mandatoryConfirmation');
+            if (!confirmationCheckbox.checked) {
+                return showMessage('Bitte bestätigen Sie die Zusage, indem Sie das Kästchen ankreuzen.', 'error');
+            }
+            
+            const bodyText = getFormattedBodyText();
+            
+            if (bodyText) {
+                // Speichere den Text global und zeige das Modal
+                sharedBodyText = bodyText;
+                document.getElementById('shareModal').classList.remove('hidden');
+            }
+        }
+        
+        /**
+         * Erzeugt den Teams-Share-Link.
+         */
+        function sendViaTeams() {
+            document.getElementById('shareModal').classList.add('hidden');
+            
+            // Teams benötigt den Text im URL-kodierten Format.
+            const body = encodeURIComponent(sharedBodyText); 
+            
+            // Teams Share Link, der ein Dialogfenster öffnet (Empfänger muss MANUELL gewählt werden).
+            const teamsLink = `https://teams.microsoft.com/share?text=${body}`;
+
+            window.open(teamsLink, '_blank');
+            showMessage('Teams-Dialog wurde geöffnet. Bitte wählen Sie nun den Empfänger manuell aus!', 'success');
+        }
+
 
         // Fügen Sie beim Laden der Seite einen initialen Slot hinzu
         window.onload = () => {
@@ -272,6 +376,4 @@
 
     </script>
 </body>
-
 </html>
-
