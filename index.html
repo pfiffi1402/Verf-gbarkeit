@@ -28,7 +28,7 @@
         
         /* Standard-App-Container-Design */
         #app {
-            /* Hintergrund-Transparenz wird durch Tailwind-Klasse bg-white/90 im HTML definiert */
+            /* Hintergrund-Transparenz wurde zu bg-white/90 geändert */
             border: 1px solid #E5E7EB; /* Heller neutraler Rahmen */
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Leichter Schatten */
         }
@@ -65,10 +65,9 @@
         }
         
         /* Winterlicher App-Container */
-        .winter-theme         #app {
-            /* Hintergrund-Transparenz wird durch Tailwind-Klasse bg-white/90 im HTML definiert */
-            border: 1px solid #E5E7EB; /* Heller neutraler Rahmen */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Leichter Schatten */
+        .winter-theme #app {
+            border: 3px solid #D9B36E; /* Goldener Rahmen */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); /* Stärkerer Schatten */
         }
 
         /* ------------------------------------------------------------------ */
@@ -103,11 +102,11 @@
         }
 
         /* Frühlingshafter App-Container */
-        .spring-theme#app {
-            /* Hintergrund-Transparenz wird durch Tailwind-Klasse bg-white/90 im HTML definiert */
-            border: 1px solid #E5E7EB; /* Heller neutraler Rahmen */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Leichter Schatten */
+        .spring-theme #app {
+            border: 3px solid #059669; /* Grüner Rahmen (spring-secondary) */
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
         }
+
 
         /* Modal Overlay */
         .modal-overlay {
@@ -151,11 +150,14 @@
 </head>
 <body class="min-h-screen p-4 sm:p-8 flex justify-center items-start">
 
-    <div id="app" class="w-full max-w-2xl bg-white rounded-xl p-6 sm:p-10 my-8">
-        <!-- Titel angepasst für den neuen Zeitraum 2026 --><h1 class="text-4xl sm:text-5xl font-extrabold mb-2 text-center">Verfügbarkeitsplaner</h1>
-        <p class="text-gray-700 mb-8 text-center text-lg">Trag hier bitte Deine Verfügbarkeit</p>
+    <!-- Hintergrund des Formulars ist nun leicht transparent (bg-white/90) -->
+    <div id="app" class="w-full max-w-2xl bg-white/90 rounded-xl p-6 sm:p-10 my-8">
+        <!-- Titel angepasst für den neuen Zeitraum 2026 -->
+        <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 text-center">Verfügbarkeitsplaner</h1>
+        <p class="text-gray-700 mb-8 text-center text-lg">Trage hier die Verfügbarkeit für Feiertage und Vorweihnachts-Wochenenden ein.</p>
 
-        <!-- Eigene Eingaben --><div class="mb-6 border-b pb-4 border-gray-100">
+        <!-- Eigene Eingaben -->
+        <div class="mb-6 border-b pb-4 border-gray-100">
             <h2 class="text-3xl font-semibold text-gray-800 mb-4 flex items-center">
                 <svg class="w-7 h-7 mr-2 text-gold-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                 Dein Name
@@ -171,25 +173,31 @@
             Deine Verfügbarkeit
         </h2>
 
-        <!-- Container für Verfügbarkeitseinträge --><div id="availabilityContainer" class="space-y-4 mb-6">
-            <!-- Einträge werden hier dynamisch eingefügt --></div>
+        <!-- Container für Verfügbarkeitseinträge -->
+        <div id="availabilityContainer" class="space-y-4 mb-6">
+            <!-- Einträge werden hier dynamisch eingefügt -->
+        </div>
 
-        <!-- Button zum Hinzufügen eines neuen Eintrags --><button onclick="addAvailabilitySlot()"
+        <!-- Button zum Hinzufügen eines neuen Eintrags -->
+        <button onclick="addAvailabilitySlot()"
                 id="addButton"
                 class="w-full sm:w-auto px-4 py-2 mb-8 text-white font-semibold rounded-lg transition duration-150 shadow-md flex items-center justify-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-            Weiteren Tag hinzufügen
+            Tag hinzufügen
         </button>
 
-        <!-- Sende-Button mit Pflicht-Checkbox --><div class="pt-6 border-t border-gray-200">
-            <!-- Pflicht-Checkbox --><div class="flex items-start mb-4">
+        <!-- Sende-Button mit Pflicht-Checkbox -->
+        <div class="pt-6 border-t border-gray-200">
+            <!-- Pflicht-Checkbox -->
+            <div class="flex items-start mb-4">
                 <input type="checkbox" id="mandatoryConfirmation" class="h-5 w-5 rounded border-gray-300 focus:ring-current mt-1">
                 <label for="mandatoryConfirmation" class="ml-3 text-sm font-medium text-gray-700 select-none">
                     Mit dem Senden der Verfügbarkeit wird eine 100%-ige Zusage getroffen!
                 </label>
             </div>
             
-            <!-- Der Button ruft nun showShareOptions() auf --><button onclick="showShareOptions()"
+            <!-- Der Button ruft nun showShareOptions() auf -->
+            <button onclick="showShareOptions()"
                     id="sendButton"
                     class="w-full px-6 py-3 text-white text-lg font-bold rounded-lg transition duration-150 shadow-xl flex items-center justify-center">
                 <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
@@ -199,25 +207,29 @@
         </div>
     </div>
 
-    <!-- Modal für die Auswahl des Sendevorgangs (FALLBACK) --><div id="shareModal" class="modal-overlay hidden">
+    <!-- Modal für die Auswahl des Sendevorgangs (FALLBACK) -->
+    <div id="shareModal" class="modal-overlay hidden">
         <div class="bg-white rounded-lg shadow-2xl p-6 w-11/12 max-w-md transform transition-all duration-300 scale-100">
             <h3 class="text-xl font-bold text-gray-800 mb-4">Übermittlung starten (Fallback)</h3>
             <p class="text-gray-600 mb-6">Ihr Gerät unterstützt die automatische Freigabe nicht. Bitte wählen Sie manuell:</p>
 
             <div class="space-y-4">
-                <!-- E-Mail Button (mit vorausgefülltem Empfänger) --><button onclick="sendViaEmail()"
+                <!-- E-Mail Button (mit vorausgefülltem Empfänger) -->
+                <button onclick="sendViaEmail()"
                     class="w-full px-4 py-3 bg-email text-white font-semibold rounded-lg hover:bg-red-700 transition duration-150 flex items-center justify-center">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
                     Per E-Mail senden (An: lue-heim@web.de und Michael Lüders)
                 </button>
                 
-                <!-- Teams Button --><button onclick="sendViaTeams()"
+                <!-- Teams Button -->
+                <button onclick="sendViaTeams()"
                         class="w-full px-4 py-3 bg-teams text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-150 flex items-center justify-center">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12c0 3.397 1.344 6.471 3.535 8.793l.002.001.002.001L12 24l8.461-3.205c2.191-2.322 3.535-5.396 3.535-8.794C24 5.373 18.627 0 12 0zm-5.45 15.65h-2.1V8.35h2.1v7.3zm4.55 0h-2v2h2v-2zm4.55 0h-2v2h2v-2z"/></svg>
                     Per Teams-Chat senden
                 </button>
                 
-                <!-- WhatsApp Button --><button onclick="sendViaWhatsApp()"
+                <!-- WhatsApp Button -->
+                <button onclick="sendViaWhatsApp()"
                     class="w-full px-4 py-3 bg-whatsapp text-white font-semibold rounded-lg hover:bg-green-600 transition duration-150 flex items-center justify-center">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 0c-6.627 0-12 5.373-12 12s5.373 12 12 12c3.313 0 6.302-1.332 8.485-3.515l.002-.002.002-.002 1.976-1.976-1.89-1.89-1.89 1.89-.92-.92c-1.637 1.637-3.882 2.656-6.31 2.656-4.97 0-9.01-4.04-9.01-9.01s4.04-9.01 9.01-9.01c4.97 0 9.01 4.04 9.01 9.01 0 2.428-1.02 4.673-2.656 6.31l.92.92 1.89-1.89 1.89 1.89-1.976 1.976-.002.002-.002.002c-2.183 2.183-5.257 3.515-8.485 3.515-6.627 0-12-5.373-12-12s5.373-12 12-12zm-3.04 7.04h-2v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg>
                     Per WhatsApp senden
@@ -233,14 +245,14 @@
 
 
     <script>
-        // Array von vordefinierten, nur den wichtigsten Terminen (gemäß Memo-Fokus)
+        // Array von vordefinierten, nun erweiterten Terminen (Feiertage ST 2026 + Planungstage)
         const specialDates = [
             
-            // === TRENNER FÜR DAS AKTUELLE JAHR ===
-            { isSeparator: true, label: 'Planungstage 2025/2026 (Aktuell)' },
+            // === TRENNER FÜR DEN START 2025/2026 (Planung) ===
+            { isSeparator: true, label: 'Planungstage & Feiertage Jahreswechsel 2025/2026' },
             
             // === PLANUNGSTAGE UND FEIERTAGSVORBEREITUNG 2025 ===
-            // Letzte zwei November-Wochenenden 2025 (als Beispiel behalten, falls in 2025 verwendet)
+            // Nov 2025 Planning Weekends
             { date: '2025-11-21', label: '21. November' }, 
             { date: '2025-11-22', label: '22. November' }, 
             { date: '2025-11-23', label: '23. November', isGroupSeparator: true },
@@ -255,25 +267,37 @@
             { date: '2025-12-31', label: '31. Dezember (Silvester)', isGroupSeparator: true }, 
             { date: '2026-01-01', label: '01. Januar (Neujahr)', isGroupSeparator: true }, 
 
-            // === TRENNER FÜR DAS NÄCHSTE JAHR ===
-            { isSeparator: true, label: 'Wichtige Planungstage 2026/2027 (Memo-Fokus)' },
-
-            // === WICHTIGE PLANUNGSTAGE 2026 (Wochenenden) ===
-            // Letzte zwei November-Wochenenden 2026 (gemäß Memo-Text)
-            { date: '2026-11-20', label: '20. November' }, // Freitag
-            { date: '2026-11-21', label: '21. November' }, // Samstag
-            { date: '2026-11-22', label: '22. November', isGroupSeparator: true }, // Sonntag
-            { date: '2026-11-27', label: '27. November' }, // Freitag
-            { date: '2026-11-28', label: '28. November' }, // Samstag
-            { date: '2026-11-29', label: '29. November', isGroupSeparator: true }, // Sonntag
+            // === TRENNER FÜR ALLE SACHSEN-ANHALT 2026 FEIERTAGS-LISTE ===
+            { isSeparator: true, label: 'ALLE Gesetzlichen Feiertage Sachsen-Anhalt 2026' },
             
-            // === WICHTIGE PLANUNGSTAGE 2026/2027 (Feiertage) ===
-            // Weihnachten / Silvester / Neujahr 2026/2027 (gemäß Memo-Text)
+            // Frühling 2026 (Bewegliche Feiertage basierend auf Ostern 2026)
+            { date: '2026-04-03', label: '03. April (Karfreitag)' },
+            { date: '2026-04-06', label: '06. April (Ostermontag)' },
+            { date: '2026-05-01', label: '01. Mai (Tag der Arbeit)' },
+            { date: '2026-05-14', label: '14. Mai (Christi Himmelfahrt)' },
+            { date: '2026-05-25', label: '25. Mai (Pfingstmontag)', isGroupSeparator: true },
+
+            // Herbst 2026 (Feste Feiertage)
+            { date: '2026-10-03', label: '03. Oktober (Tag der Deutschen Einheit)' },
+            { date: '2026-10-31', label: '31. Oktober (Reformationstag)', isGroupSeparator: true },
+
+            // === TRENNER FÜR ZUSÄTZLICHE PLANUNGSTAGE 2026 ===
+            { isSeparator: true, label: 'Zusätzliche Planungstage 2026 (Memo-Fokus)' },
+
+            // Zusätzliche Planungstage 2026 (Wochenenden und Vorfeiertage)
+            { date: '2026-11-20', label: '20. November' }, 
+            { date: '2026-11-21', label: '21. November' }, 
+            { date: '2026-11-22', label: '22. November', isGroupSeparator: true },
+            { date: '2026-11-27', label: '27. November' }, 
+            { date: '2026-11-28', label: '28. November' }, 
+            { date: '2026-11-29', label: '29. November', isGroupSeparator: true },
+
+            // Weihnachten / Silvester 2026 (Die Feiertage 25/26 sind bereits oben als FEIERTAG markiert)
             { date: '2026-12-24', label: '24. Dezember (Heiligabend)' },
-            { date: '2026-12-25', label: '25. Dezember (1. Weihnachtstag)' },
-            { date: '2026-12-26', label: '26. Dezember (2. Weihnachtstag)' },
+            { date: '2026-12-25', label: '25. Dezember (1.Weihnachtstag)' },
+            { date: '2026-12-26', label: '26. Dezember (2.Weihnachtstag)' },
             { date: '2026-12-31', label: '31. Dezember (Silvester)' },
-            { date: '2027-01-01', label: '01. Januar (Neujahr 2027)', isGroupSeparator: true },
+            { date: '2027-01-01', label: '01. Januar 2027 (Neujahr)', isGroupSeparator: true },
         ];
         
         // Globale Variable, um den Betreff, Body und Empfänger zu speichern
@@ -368,7 +392,9 @@
             const addButton = document.getElementById('addButton');
             const confirmationCheckbox = document.getElementById('mandatoryConfirmation');
             const h1Element = document.querySelector('h1');
-            const dateSelects = document.querySelectorAll('.date-select');
+            // Selectoren müssen aktualisiert werden, da die Slots dynamisch erzeugt werden
+            // Wir müssen die Klassen erst beim Erstellen der Slots neu setzen oder hier ein Listener aufrufen.
+            // Besser: Beim Erstellen des Slots anwenden (siehe addAvailabilitySlot). Hier nur die statischen Elemente.
 
 
             // 1. Theme-Klassen und Basis-Styles zurücksetzen (NORMAL-DESIGN)
@@ -386,12 +412,6 @@
             h1Element.classList.remove('text-festive-primary', 'text-spring-primary');
             h1Element.classList.add('text-primary');
 
-            dateSelects.forEach(select => {
-                select.classList.remove('focus:ring-festive-secondary', 'focus:border-festive-secondary', 'focus:ring-spring-secondary', 'focus:border-spring-secondary');
-                select.classList.add('focus:ring-secondary', 'focus:border-secondary');
-            });
-
-
             // 2. Theme-Klassen anwenden
             if (isWinter) {
                 body.classList.add('winter-theme');
@@ -405,10 +425,6 @@
                 h1Element.classList.remove('text-primary');
                 h1Element.classList.add('text-festive-primary');
 
-                dateSelects.forEach(select => {
-                    select.classList.remove('focus:ring-secondary', 'focus:border-secondary');
-                    select.classList.add('focus:ring-festive-secondary', 'focus:border-festive-secondary');
-                });
                 
             } else if (isSpring) {
                 body.classList.add('spring-theme');
@@ -421,11 +437,6 @@
                 confirmationCheckbox.classList.add('text-spring-primary');
                 h1Element.classList.remove('text-primary');
                 h1Element.classList.add('text-spring-primary');
-
-                dateSelects.forEach(select => {
-                    select.classList.remove('focus:ring-secondary', 'focus:border-secondary');
-                    select.classList.add('focus:ring-spring-secondary', 'focus:border-spring-secondary');
-                });
             }
         }
 
@@ -452,6 +463,7 @@
                     return;
                 }
 
+                // Verwende d.date, um ein Date-Objekt zu erstellen, wichtig für den Vergleich
                 const slotDate = new Date(d.date + 'T00:00:00');
                 
                 if (slotDate.getTime() >= todayNormalized) {
@@ -472,8 +484,9 @@
 
             futureDates.forEach(d => {
                 if (d.isSeparator) {
+                    // NEUER, BESSER SICHTBARER STIL FÜR SEPARATOREN
                     options += `<option value="" disabled 
-                                class="bg-gray-100 text-center font-bold text-red-700 
+                                class="bg-blue-50 text-center font-bold text-gray-700 
                                 border-t border-b border-gray-400 py-1 select-none">
                                     ${d.label}
                                 </option>`;
@@ -485,6 +498,7 @@
                     options += `<option value="${d.date}">${displayLabel}</option>`;
 
                     if (d.isGroupSeparator) {
+                         // Fügt einen kleinen visuellen Trenner nach wichtigen Gruppen hinzu
                          options += `<option value="" disabled class="bg-gray-100 text-gray-400" 
                                      style="padding: 0; margin: 0; height: 1px; line-height: 1px; font-size: 8px;">
                                      &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
@@ -502,25 +516,33 @@
         function addAvailabilitySlot() {
             const container = document.getElementById('availabilityContainer');
             const slotId = 'slot-' + Date.now();
+
+            // Bestimme die aktuellen Fokus-Farben
+            let focusRingClass = 'focus:ring-secondary focus:border-secondary';
+            if (isWinterSeason()) {
+                focusRingClass = 'focus:ring-festive-secondary focus:border-festive-secondary';
+            } else if (isSpringSeason()) {
+                focusRingClass = 'focus:ring-spring-secondary focus:border-spring-secondary';
+            }
             
             const slotHtml = `
                 <div id="${slotId}" class="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col sm:flex-row gap-3 items-center">
                     
                     <!-- Datums-Auswahl --><div class="w-full sm:w-1/3">
                         <label class="block text-xs font-medium text-gray-500 mb-0.5">Tag auswählen</label>
-                        <select class="date-select w-full p-2 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150" required>
+                        <select class="date-select w-full p-2 border border-gray-300 rounded-lg ${focusRingClass} transition duration-150" required>
                             ${createDateOptions()}
                         </select>
                     </div>
 
                     <!-- Startzeit (Von) --><div class="w-full sm:w-1/4">
                         <label class="block text-xs font-medium text-gray-500 mb-0.5">Von</label>
-                        <input type="time" placeholder="Bitte wählen" value="" class="start-time w-full p-2 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150" required>
+                        <input type="time" placeholder="Bitte wählen" value="" class="start-time w-full p-2 border border-gray-300 rounded-lg ${focusRingClass} transition duration-150" required>
                     </div>
 
                     <!-- Endzeit (Bis) --><div class="w-full sm:w-1/4">
                         <label class="block text-xs font-medium text-gray-500 mb-0.5">Bis</label>
-                        <input type="time" placeholder="Bitte wählen" value="" class="end-time w-full p-2 border border-gray-300 rounded-lg focus:ring-secondary focus:border-secondary transition duration-150" required>
+                        <input type="time" placeholder="Bitte wählen" value="" class="end-time w-full p-2 border border-gray-300 rounded-lg ${focusRingClass} transition duration-150" required>
                     </div>
 
                     <!-- Löschen-Button --><button onclick="removeAvailabilitySlot('${slotId}')"
@@ -541,21 +563,6 @@
                     startTimeElement.focus();
                 }
             });
-
-            // Wende die saisonalen Styles an
-            const isSpring = isSpringSeason();
-            const isWinter = isWinterSeason();
-
-            if (isWinter) {
-                selectElement.classList.remove('focus:ring-secondary', 'focus:border-secondary');
-                selectElement.classList.add('focus:ring-festive-secondary', 'focus:border-festive-secondary');
-            } else if (isSpring) {
-                selectElement.classList.remove('focus:ring-secondary', 'focus:border-secondary');
-                selectElement.classList.add('focus:ring-spring-secondary', 'focus:border-spring-secondary');
-            } else {
-                 selectElement.classList.remove('focus:ring-festive-secondary', 'focus:border-festive-secondary', 'focus:ring-spring-secondary', 'focus:border-spring-secondary');
-                selectElement.classList.add('focus:ring-secondary', 'focus:border-secondary');
-            }
         }
 
         /**
@@ -634,9 +641,10 @@
             const recipient = 'lue-heim@web.de,michael.lueders@taxi-pfeiffer-blankenburg.de'; 
 
             // Textkörper erstellen
-            let bodyText = `<b>Hiermit sende ich, ${userName} meine Verfügbarkeit(en)!</b>\n\n`;
+            let  bodyText = `Sehr geehrte Damen und Herren, anbei erhalten Sie meine Daten über die Verfügbarkeit zu den Feiertagen und Vorweihnachts-Wochenenden.\n\n`;      
             
-                        bodyText += "---------------------------------------\n";
+            bodyText += `Verfügbarkeit von: ${userName}\n\n`;
+            bodyText += "---------------------------------------\n";
 
             entries.sort((a, b) => new Date(a.date) - new Date(b.date)); 
 
@@ -654,8 +662,10 @@
             });
 
             bodyText += "\n---------------------------------------\n";
-            bodyText += "Mit freundlichen Grüßen,\n${userName}";
+            bodyText += "Bitte übernehmen Sie diese Zeiten in den Schichtplan.\n\n"
+            bodyText += "Mit freundlichen Grüßen,\n";
             
+                        
             return { subject, body: bodyText, recipient };
         }
 
@@ -749,11 +759,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
