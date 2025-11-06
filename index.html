@@ -151,7 +151,7 @@
 
     <div id="app" class="w-full max-w-2xl bg-white rounded-xl p-6 sm:p-10 my-8">
         <!-- Titel angepasst für den neuen Zeitraum 2026 --><h1 class="text-4xl sm:text-5xl font-extrabold mb-2 text-center">Verfügbarkeitsplaner</h1>
-        <p class="text-gray-700 mb-8 text-center text-lg">Trag hier Deine Verfügbarkeit</p>
+        <p class="text-gray-700 mb-8 text-center text-lg">Trag hier bitte Deine Verfügbarkeit</p>
 
         <!-- Eigene Eingaben --><div class="mb-6 border-b pb-4 border-gray-100">
             <h2 class="text-3xl font-semibold text-gray-800 mb-4 flex items-center">
@@ -632,9 +632,8 @@
             const recipient = 'lue-heim@web.de,michael.lueders@taxi-pfeiffer-blankenburg.de'; 
 
             // Textkörper erstellen
-            let bodyText = `*** WICHTIG: Bitte senden Sie diese Nachricht an Ihren Vorgesetzten/Teamleiter! ***\n\n`;
+            let bodyText = `*** Hiermit sende ich, ${userName} meine Verfügbarkeit(en)! ***\n\n`;
             
-            bodyText += `Sehr geehrte Damen und Herren, anbei erhalten Sie meine Daten über die Verfügbarkeit für die wichtigen Planungstage zur Jahreswende.\n\n`;
             bodyText += `Verfügbarkeit von: ${userName}\n\n`;
             bodyText += "---------------------------------------\n";
 
@@ -654,7 +653,7 @@
             });
 
             bodyText += "\n---------------------------------------\n";
-            bodyText += "Bitte übernehmen Sie diese Zeiten in den Schichtplan.\n\nMit freundlichen Grüßen,\nIhr Teammitglied";
+            bodyText += "Mit freundlichen Grüßen,\n${userName}";
             
             return { subject, body: bodyText, recipient };
         }
@@ -749,3 +748,4 @@
     </script>
 </body>
 </html>
+
