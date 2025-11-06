@@ -627,14 +627,13 @@
             }
             
             // Betreff für E-Mail und Web Share API
-            const subject = `Verfügbarkeit ${userName}: Wichtige Planungstage`;
+            const subject = `Verfügbarkeit ${userName}`;
             // NEU: Liste der Empfänger-E-Mail-Adressen (Komma-separiert für mailto: Link)
             const recipient = 'lue-heim@web.de,michael.lueders@taxi-pfeiffer-blankenburg.de'; 
 
             // Textkörper erstellen
-            let bodyText = `*** Hiermit sende ich, ${userName} meine Verfügbarkeit(en)! ***\n\n`;
+            let bodyText = `Verfügbarkeit von: ${userName}\n\n`;
             
-            bodyText += `Verfügbarkeit von: ${userName}\n\n`;
             bodyText += "---------------------------------------\n";
 
             entries.sort((a, b) => new Date(a.date) - new Date(b.date)); 
@@ -749,6 +748,7 @@
     </script>
 </body>
 </html>
+
 
 
 
