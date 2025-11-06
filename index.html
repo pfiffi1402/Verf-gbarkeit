@@ -27,7 +27,7 @@
         }
         
         /* Standard-App-Container-Design */
-               #app {
+        #app {
             /* Hintergrund-Transparenz wird durch Tailwind-Klasse bg-white/90 im HTML definiert */
             border: 1px solid #E5E7EB; /* Heller neutraler Rahmen */
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Leichter Schatten */
@@ -65,9 +65,10 @@
         }
         
         /* Winterlicher App-Container */
-        .winter-theme #app {
-            border: 3px solid #D9B36E; /* Goldener Rahmen */
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); /* Stärkerer Schatten */
+        .winter-theme         #app {
+            /* Hintergrund-Transparenz wird durch Tailwind-Klasse bg-white/90 im HTML definiert */
+            border: 1px solid #E5E7EB; /* Heller neutraler Rahmen */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Leichter Schatten */
         }
 
         /* ------------------------------------------------------------------ */
@@ -75,7 +76,7 @@
         /* ------------------------------------------------------------------ */
         .spring-theme {
             /* Hintergrund: Osterthema (generischer) */
-            background-image: url('https://cdn.pixabay.com/photo/2022/02/19/07/21/eggs-7022048_1280.jpg');
+            background-image: url('https://cdn.pixabay.com/photo/2016/03/27/07/12/easter-1282697_1280.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -102,11 +103,11 @@
         }
 
         /* Frühlingshafter App-Container */
-        .spring-theme #app {
-            border: 3px solid #059669; /* Grüner Rahmen (spring-secondary) */
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+        .spring-theme#app {
+            /* Hintergrund-Transparenz wird durch Tailwind-Klasse bg-white/90 im HTML definiert */
+            border: 1px solid #E5E7EB; /* Heller neutraler Rahmen */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Leichter Schatten */
         }
-
 
         /* Modal Overlay */
         .modal-overlay {
@@ -748,6 +749,7 @@
     </script>
 </body>
 </html>
+
 
 
 
