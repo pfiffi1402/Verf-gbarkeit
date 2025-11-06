@@ -622,20 +622,19 @@
             });
 
             if (!allValid) {
-                showMessage('Bitte wählen Sie für jeden Slot ein Datum und eine Uhrzeit (von/bis) aus.', 'error');
+                showMessage('Bitte wählen Sie für jeden Tag ein Datum und eine Uhrzeit (von/bis) aus.', 'error');
                 return null;
             }
             
             // Betreff für E-Mail und Web Share API
-            const subject = `Verfügbarkeit ${userName}: Wichtige Planungstage`;
+            const subject = `Verfügbarkeit ${userName}`;
             // NEU: Liste der Empfänger-E-Mail-Adressen (Komma-separiert für mailto: Link)
             const recipient = 'lue-heim@web.de,michael.lueders@taxi-pfeiffer-blankenburg.de'; 
 
             // Textkörper erstellen
-            let bodyText = `*** Hiermit sende ich, ${userName} meine Verfügbarkeit(en)! ***\n\n`;
+            let bodyText = `Hiermit sende ich, ${userName}\n\n`;<br>
             
-            bodyText += `Verfügbarkeit von: ${userName}\n\n`;
-            bodyText += "---------------------------------------\n";
+            bodyText += "---------------------------------------\n";<br>
 
             entries.sort((a, b) => new Date(a.date) - new Date(b.date)); 
 
@@ -652,7 +651,7 @@
                 bodyText += `${customDate}: Von ${entry.start} Uhr bis ${entry.end} Uhr\n`;
             });
 
-            bodyText += "\n---------------------------------------\n";
+            bodyText += "\n---------------------------------------\n";<br>
             bodyText += "Mit freundlichen Grüßen
                  ${userName}"\n;
             
@@ -749,3 +748,4 @@
     </script>
 </body>
 </html>
+
