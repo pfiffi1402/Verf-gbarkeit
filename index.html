@@ -11,7 +11,7 @@
         body {
             font-family: 'Inter', sans-serif;
             /* Hintergrund: Neue URL (Weihnachtsgeschenke) */
-            background-image: url('https://images.unsplash.com/photo-1576088277255-b46187705141?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-image: url('https://cdn.pixabay.com/photo/2020/12/25/22/03/merry-christmas-5860209_1280.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -75,7 +75,7 @@
 <body class="min-h-screen p-4 sm:p-8 flex justify-center items-start">
 
     <div id="app" class="w-full max-w-2xl bg-white rounded-xl p-6 sm:p-10 my-8">
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-primary mb-2 text-center">Verfügbarkeitsplaner</h1>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-primary mb-2 text-center">Verfügbarkeitsplaner Feiertage</h1>
         <p class="text-gray-700 mb-8 text-center text-lg">Tragen Sie Ihre Verfügbarkeit für die kommenden Feiertage ein.</p>
 
         <!-- Eigene Eingaben --><div class="mb-6 border-b pb-4 border-gray-100">
@@ -83,7 +83,7 @@
                 <svg class="w-7 h-7 mr-2 text-gold-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                 Ihr Name
             </h2>
-            <label for="userName" class="block text-sm font-medium text-gray-700 mb-1 sr-only">Ihr Name</label>
+            <label for="userName" class="block text-sm font-medium text-gray-700 mb-1 sr-only">Ihr Name /</label>
             <input type="text" id="userName" placeholder="Max Mustermann"
                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150" required>
             <p class="text-xs text-gray-600 mt-1">Dieser Name wird in der Teams-Nachricht verwendet.</p>
@@ -100,7 +100,7 @@
         <!-- Button zum Hinzufügen eines neuen Eintrags --><button onclick="addAvailabilitySlot()"
                 class="w-full sm:w-auto px-4 py-2 mb-8 bg-secondary text-white font-semibold rounded-lg hover:bg-green-700 transition duration-150 shadow-md flex items-center justify-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-             Hinzufügen
+            Hinzufügen
         </button>
 
         <!-- Sende-Button mit Pflicht-Checkbox --><div class="pt-6 border-t border-gray-200">
@@ -143,24 +143,34 @@
 
     <script>
         // Array von vordefinierten Feiertagen/relevanten Tagen
+        // NEU: Die Daten sind jetzt chronologisch sortiert.
         const specialDates = [
-            // NEUE NOVEMBER WOCHENENDEN
+            // November
+            { date: '2025-11-07', label: '07. Nov (Freitag vor Wochenende)' },
             { date: '2025-11-08', label: '08. Nov (Wochenende vor Weihnachten)' },
             { date: '2025-11-09', label: '09. Nov (Wochenende vor Weihnachten)' },
+            { date: '2025-11-14', label: '14. Nov (Freitag vor Wochenende)' },
             { date: '2025-11-15', label: '15. Nov (Wochenende vor Weihnachten)' },
             { date: '2025-11-16', label: '16. Nov (Wochenende vor Weihnachten)' },
-            // BESTEHENDE DATEN
+            
+            // Dezember
+            { date: '2025-12-05', label: '05. Dez (Freitag vor 2. Adventswochenende)' },
             { date: '2025-12-06', label: '06. Dez (Samstag vor Weihnachten)' },
             { date: '2025-12-07', label: '07. Dez (Sonntag vor Weihnachten)' },
+            { date: '2025-12-12', label: '12. Dez (Freitag vor 3. Adventswochenende)' },
             { date: '2025-12-13', label: '13. Dez (Samstag vor Weihnachten)' },
             { date: '2025-12-14', label: '14. Dez (Sonntag vor Weihnachten)' },
+            { date: '2025-12-19', label: '19. Dez (Freitag vor 4. Adventswochenende)' },
             { date: '2025-12-20', label: '20. Dez (Samstag vor Weihnachten)' }, 
             { date: '2025-12-21', label: '21. Dez (Sonntag vor Weihnachten)' }, 
             { date: '2025-12-24', label: '24. Dez (Heiligabend)' },
             { date: '2025-12-25', label: '25. Dez (1. Weihnachtstag)' },
             { date: '2025-12-26', label: '26. Dez (2. Weihnachtstag)' },
             { date: '2025-12-31', label: '31. Dez (Silvester)' },
+            
+            // Januar
             { date: '2026-01-01', label: '01. Jan (Neujahr)' },
+            { date: '2026-01-02', label: '02. Jan (Freitag nach Neujahr)' },
         ];
         
         // Globale Variable, um den erzeugten Text zu speichern
@@ -178,6 +188,7 @@
 
         /**
          * Filtert die specialDates, um nur Daten zu behalten, die heute oder in der Zukunft liegen.
+         * Da specialDates bereits chronologisch sortiert ist, ist die Ausgabe ebenfalls sortiert.
          * @returns {Array} Gefilterte Array von Datumsobjekten.
          */
         function getFutureDates() {
@@ -201,7 +212,8 @@
          */
         function createDateOptions() {
             let options = '<option value="" disabled selected>Datum auswählen...</option>';
-            const futureDates = getFutureDates(); // Verwende die gefilterte Liste
+            // getFutureDates liefert die Daten bereits chronologisch sortiert und gefiltert.
+            const futureDates = getFutureDates(); 
 
             futureDates.forEach(d => {
                 options += `<option value="${d.date}">${d.label} (${d.date.slice(5)})</option>`;
@@ -327,7 +339,8 @@
             bodyText += `Verfügbarkeit von: ${userName}\n\n`;
             bodyText += "---------------------------------------\n";
 
-            entries.sort((a, b) => new Date(a.date) - new Date(b.date)); // Nach Datum sortieren
+            // Die gesammelten Einträge nach Datum sortieren, um eine saubere Ausgabe zu gewährleisten
+            entries.sort((a, b) => new Date(a.date) - new Date(b.date)); 
 
             entries.forEach(entry => {
                 // Konvertiere das Datum ins Format DD, MM, YYYY
@@ -393,5 +406,3 @@
     </script>
 </body>
 </html>
-
-
