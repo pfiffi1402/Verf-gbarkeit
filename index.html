@@ -7,20 +7,43 @@
     <!-- Google Fonts für Great Vibes (Festliche Schrift) und Inter (Lesbarkeit) --><link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Lade Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Spezifische Schriftart und Hintergrund für Ästhetik */
+        /* ------------------------------------------------------------------ */
+        /* BASIS-STYLES (NORMALES DESIGN) */
+        /* ------------------------------------------------------------------ */
         body {
             font-family: 'Inter', sans-serif;
-            /* Hintergrund: Neue URL (Weihnachtsgeschenke) */
+            background-color: #f7f7f7; /* Helles Grau als neutraler Hintergrund */
+            color: #333;
+            position: relative;
+        }
+
+        /* Standard-Überschriften-Design */
+        h1, h2 {
+            font-family: 'Inter', sans-serif;
+        }
+        h1 {
+            color: #1D4ED8; /* Standard-Blau */
+            text-shadow: none;
+        }
+        
+        /* Standard-App-Container-Design */
+        #app {
+            border: 1px solid #E5E7EB; /* Heller neutraler Rahmen */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Leichter Schatten */
+        }
+        
+        /* ------------------------------------------------------------------ */
+        /* WINTER-DESIGN (WEIHNACHTEN / NEUJAHR) */
+        /* ------------------------------------------------------------------ */
+        .winter-theme {
+            /* Hintergrund: Weihnachtsgeschenke */
             background-image: url('https://cdn.pixabay.com/photo/2020/12/25/22/03/merry-christmas-5860209_1280.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: #333; /* Standard Textfarbe anpassen */
-            position: relative; /* Wichtig für das Pseudo-Element Overlay */
         }
-
-        /* Overlay, um das Bild subtiler zu machen (nicht in voller Stärke) */
-        body::before {
+        /* Overlay für winterliches Bild */
+        .winter-theme::before {
             content: "";
             position: absolute;
             top: 0;
@@ -28,16 +51,62 @@
             width: 100%;
             height: 100%;
             background-color: rgba(255, 255, 255, 0.4); /* 40% weiße Transparenz */
-            z-index: -1; /* Hinter dem Inhalt */
+            z-index: -1;
         }
 
-        h1, h2 {
-            font-family: 'Great Vibes', cursive; /* Festliche Schrift für Überschriften */
+        /* Winterliche Schrift und Farbe für Überschriften */
+        .winter-theme h1, .winter-theme h2 {
+            font-family: 'Great Vibes', cursive;
         }
-        h1 {
-            color: #B91C1C; /* Sattes Weihnachtsrot */
+        .winter-theme h1 {
+            color: #B91C1C; /* Sattes Weihnachtsrot (festive-primary) */
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
+        
+        /* Winterlicher App-Container */
+        .winter-theme #app {
+            border: 3px solid #D9B36E; /* Goldener Rahmen */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); /* Stärkerer Schatten */
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* FRÜHLINGS-DESIGN (OSTERN / PFINGSTEN) */
+        /* ------------------------------------------------------------------ */
+        .spring-theme {
+            /* Hintergrund: Osterthema (generischer) */
+            background-image: url('https://cdn.pixabay.com/photo/2022/02/19/07/21/eggs-7022048_960_720.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        /* Overlay für frühlingshaftes Bild */
+        .spring-theme::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.5); /* 50% weiße Transparenz */
+            z-index: -1;
+        }
+
+        /* Frühlings-Schrift und Farbe für Überschriften */
+        .spring-theme h1, .spring-theme h2 {
+            font-family: 'Great Vibes', cursive;
+        }
+        .spring-theme h1 {
+            color: #9D00FF; /* Helles Lila/Violett */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Frühlingshafter App-Container */
+        .spring-theme #app {
+            border: 3px solid #059669; /* Grüner Rahmen (spring-secondary) */
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+        }
+
+
         /* Modal Overlay */
         .modal-overlay {
             position: fixed;
@@ -45,16 +114,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Etwas dunkler für mehr Kontrast */
+            background-color: rgba(0, 0, 0, 0.6);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 100;
-        }
-        /* Hauptcontainer mit festlichem Touch */
-        #app {
-            border: 3px solid #D9B36E; /* Goldener Rahmen */
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); /* Stärkerer Schatten */
         }
     </style>
     <script>
@@ -62,10 +126,19 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary': '#B91C1C', /* Sattes Weihnachtsrot */
-                        'secondary': '#047857', /* Dunkles Tannengrün */
-                        'gold-accent': '#D9B36E', /* Gold für Akzente */
-                        'teams': '#4C70F5' /* Teams Indigo/Blau beibehalten */
+                        // Standard Farben
+                        'primary': '#1D4ED8', /* Normal-Blau */
+                        'secondary': '#059669', /* Normal-Grün */
+                        'gold-accent': '#D9B36E', /* Gold beibehalten für Akzente */
+                        'teams': '#4C70F5', /* Teams Indigo/Blau */
+
+                        // WINTER Overrides (festlich)
+                        'festive-primary': '#B91C1C', /* Weihnachtsrot */
+                        'festive-secondary': '#047857', /* Tannengrün */
+
+                        // FRÜHLING Overrides
+                        'spring-primary': '#9D00FF', /* Lila/Violett */
+                        'spring-secondary': '#059669', /* Saftiges Grün */
                     },
                 }
             }
@@ -75,8 +148,8 @@
 <body class="min-h-screen p-4 sm:p-8 flex justify-center items-start">
 
     <div id="app" class="w-full max-w-2xl bg-white rounded-xl p-6 sm:p-10 my-8">
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-primary mb-2 text-center">Verfügbarkeitsplaner Feiertage</h1>
-        <p class="text-gray-700 mb-8 text-center text-lg">Tragen Sie Ihre Verfügbarkeit für die kommenden Feiertage ein.</p>
+        <!-- Titel angepasst für den neuen Zeitraum 2026 --><h1 class="text-4xl sm:text-5xl font-extrabold mb-2 text-center">Verfügbarkeitsplaner</h1>
+        <p class="text-gray-700 mb-8 text-center text-lg">Tragen Sie Ihre Verfügbarkeit für Feiertage in Sachsen-Anhalt 2026 und wichtige Planungstage ein.</p>
 
         <!-- Eigene Eingaben --><div class="mb-6 border-b pb-4 border-gray-100">
             <h2 class="text-3xl font-semibold text-gray-800 mb-4 flex items-center">
@@ -98,21 +171,23 @@
             <!-- Einträge werden hier dynamisch eingefügt --></div>
 
         <!-- Button zum Hinzufügen eines neuen Eintrags --><button onclick="addAvailabilitySlot()"
-                class="w-full sm:w-auto px-4 py-2 mb-8 bg-secondary text-white font-semibold rounded-lg hover:bg-green-700 transition duration-150 shadow-md flex items-center justify-center">
+                id="addButton"
+                class="w-full sm:w-auto px-4 py-2 mb-8 text-white font-semibold rounded-lg transition duration-150 shadow-md flex items-center justify-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
             Hinzufügen
         </button>
 
         <!-- Sende-Button mit Pflicht-Checkbox --><div class="pt-6 border-t border-gray-200">
             <!-- Pflicht-Checkbox --><div class="flex items-start mb-4">
-                <input type="checkbox" id="mandatoryConfirmation" class="h-5 w-5 text-primary rounded border-gray-300 focus:ring-primary mt-1">
+                <input type="checkbox" id="mandatoryConfirmation" class="h-5 w-5 rounded border-gray-300 focus:ring-current mt-1">
                 <label for="mandatoryConfirmation" class="ml-3 text-sm font-medium text-gray-700 select-none">
                     Mit dem Senden der Verfügbarkeit wird eine 100%-ige Zusage getroffen!
                 </label>
             </div>
             
             <!-- Der Button ruft nun showShareOptions() auf --><button onclick="showShareOptions()"
-                    class="w-full px-6 py-3 bg-primary text-white text-lg font-bold rounded-lg hover:bg-red-700 transition duration-150 shadow-xl flex items-center justify-center">
+                    id="sendButton"
+                    class="w-full px-6 py-3 text-white text-lg font-bold rounded-lg transition duration-150 shadow-xl flex items-center justify-center">
                 <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 Verfügbarkeit verbindlich senden
             </button>
@@ -142,39 +217,245 @@
 
 
     <script>
-        // Array von vordefinierten Feiertagen/relevanten Tagen
-        // NEU: Die Daten sind jetzt chronologisch sortiert.
+        // Array von vordefinierten Feiertagen/relevanten Tagen (Sachsen-Anhalt)
         const specialDates = [
-            // November
-            { date: '2025-11-07', label: '07. Nov (Freitag vor Wochenende)' },
-            { date: '2025-11-08', label: '08. Nov (Wochenende vor Weihnachten)' },
-            { date: '2025-11-09', label: '09. Nov (Wochenende vor Weihnachten)' },
-            { date: '2025-11-14', label: '14. Nov (Freitag vor Wochenende)' },
-            { date: '2025-11-15', label: '15. Nov (Wochenende vor Weihnachten)' },
-            { date: '2025-11-16', label: '16. Nov (Wochenende vor Weihnachten)' },
+            // === PLANUNGSTAGE UND FEIERTAGSVORBEREITUNG 2025 (KEINE KLAMMEREINTRÄGE) ===
+            { date: '2025-11-07', label: '07. November' },
+            { date: '2025-11-08', label: '08. November' },
+            { date: '2025-11-09', label: '09. November' },
+            { date: '2025-11-14', label: '14. November' },
+            { date: '2025-11-15', label: '15. November' },
+            { date: '2025-11-16', label: '16. November' },
+            // Adventswochenenden
+            { date: '2025-12-06', label: '06. Dezember' },
+            { date: '2025-12-07', label: '07. Dezember' },
+            { date: '2025-12-13', label: '13. Dezember' },
+            { date: '2025-12-14', label: '14. Dezember' },
             
-            // Dezember
-            { date: '2025-12-05', label: '05. Dez (Freitag vor 2. Adventswochenende)' },
-            { date: '2025-12-06', label: '06. Dez (Samstag vor Weihnachten)' },
-            { date: '2025-12-07', label: '07. Dez (Sonntag vor Weihnachten)' },
-            { date: '2025-12-12', label: '12. Dez (Freitag vor 3. Adventswochenende)' },
-            { date: '2025-12-13', label: '13. Dez (Samstag vor Weihnachten)' },
-            { date: '2025-12-14', label: '14. Dez (Sonntag vor Weihnachten)' },
-            { date: '2025-12-19', label: '19. Dez (Freitag vor 4. Adventswochenende)' },
-            { date: '2025-12-20', label: '20. Dez (Samstag vor Weihnachten)' }, 
-            { date: '2025-12-21', label: '21. Dez (Sonntag vor Weihnachten)' }, 
-            { date: '2025-12-24', label: '24. Dez (Heiligabend)' },
-            { date: '2025-12-25', label: '25. Dez (1. Weihnachtstag)' },
-            { date: '2025-12-26', label: '26. Dez (2. Weihnachtstag)' },
-            { date: '2025-12-31', label: '31. Dez (Silvester)' },
+            // Weihnachten / Silvester 2025 (Feiertagsbezeichnung in Klammern)
+            { date: '2025-12-24', label: '24. Dezember (Heiligabend)' }, 
+            { date: '2025-12-25', label: '25. Dezember (1. Weihnachtstag)' },
+            { date: '2025-12-26', label: '26. Dezember (2. Weihnachtstag)' },
+            { date: '2025-12-31', label: '31. Dezember (Silvester)' }, 
             
-            // Januar
-            { date: '2026-01-01', label: '01. Jan (Neujahr)' },
-            { date: '2026-01-02', label: '02. Jan (Freitag nach Neujahr)' },
+            // === TRENNER FÜR DAS NEUE JAHR (wie gewünscht) ===
+            { isSeparator: true, label: 'Feiertage & Planungstage 2026 (ST)' },
+
+            // === FEIER- UND PLANUNGSTAGE 2026/2027 ===
+            
+            // Feste Feiertage Sachsen-Anhalt 2026 (Feiertagsbezeichnung in Klammern)
+            { date: '2026-01-01', label: '01. Januar (Neujahr)' },
+            { date: '2026-01-06', label: '06. Januar (Heilige Drei Könige)' },
+            { date: '2026-04-03', label: '03. April (Karfreitag)' },
+            { date: '2026-04-05', label: '05. April (Ostersonntag)' }, // Kein offizieller Feiertag in ST, aber wichtig
+            { date: '2026-04-06', label: '06. April (Ostermontag)' },
+            { date: '2026-05-01', label: '01. Mai (Tag der Arbeit)' },
+            { date: '2026-05-14', label: '14. Mai (Christi Himmelfahrt)' },
+            { date: '2026-05-24', label: '24. Mai (Pfingstsonntag)' }, // Kein offizieller Feiertag in ST, aber wichtig
+            { date: '2026-05-25', label: '25. Mai (Pfingstmontag)' },
+            { date: '2026-10-03', label: '03. Oktober (Tag der Deutschen Einheit)' },
+            { date: '2026-10-31', label: '31. Oktober (Reformationstag)' },
+
+            // Planungstage ab Mitte November 2026 (KEINE KLAMMEREINTRÄGE)
+            { date: '2026-11-13', label: '13. November' },
+            { date: '2026-11-14', label: '14. November' },
+            { date: '2026-11-15', label: '15. November' },
+            { date: '2026-11-20', label: '20. November' },
+            { date: '2026-11-21', label: '21. November' },
+            { date: '2026-11-22', label: '22. November' },
+            { date: '2026-11-27', label: '27. November' },
+            { date: '2026-11-28', label: '28. November' },
+            { date: '2026-11-29', label: '29. November' },
+            
+            // Adventswochenenden 2026 (KEINE KLAMMEREINTRÄGE)
+            { date: '2026-12-04', label: '04. Dezember' },
+            { date: '2026-12-05', label: '05. Dezember' },
+            { date: '2026-12-06', label: '06. Dezember' },
+            { date: '2026-12-11', label: '11. Dezember' },
+            { date: '2026-12-12', label: '12. Dezember' },
+            { date: '2026-12-13', label: '13. Dezember' },
+            { date: '2026-12-18', label: '18. Dezember' },
+            { date: '2026-12-19', label: '19. Dezember' }, 
+            { date: '2026-12-20', label: '20. Dezember' }, 
+            
+            // Weihnachten / Silvester / Neujahr 2026/2027 (Feiertagsbezeichnung in Klammern)
+            { date: '2026-12-24', label: '24. Dezember (Heiligabend)' },
+            { date: '2026-12-25', label: '25. Dezember (1. Weihnachtstag)' },
+            { date: '2026-12-26', label: '26. Dezember (2. Weihnachtstag)' },
+            { date: '2026-12-31', label: '31. Dezember (Silvester)' },
+            { date: '2027-01-01', label: '01. Januar (Neujahr 2027)' },
         ];
         
         // Globale Variable, um den erzeugten Text zu speichern
         let sharedBodyText = '';
+
+        /**
+         * Berechnet das Datum des Ostersonntags für ein gegebenes Jahr (Y) 
+         * mit dem vereinfachten Gauß-Algorithmus (Gregorian Calendar).
+         * @param {number} Y - Das Jahr (z.B. 2026)
+         * @returns {Date} Das Datum des Ostersonntags um UTC-Mitternacht.
+         */
+        function getEasterSunday(Y) {
+            const C = Math.floor(Y / 100);
+            const N = Y - 19 * Math.floor(Y / 19);
+            const K = Math.floor((C - 17) / 25);
+            const I = C - Math.floor(C / 4) - Math.floor((C - K) / 3) + 19 * N + 15;
+            const J = I - 30 * Math.floor(I / 30);
+            const L = J - Math.floor(J / 28) * (1 - Math.floor(J / 28) * Math.floor(29 / (J + 1)) * Math.floor((21 - N) / 11));
+            const M = L - 7 * Math.floor(L / 7);
+            const D = 21 + M;
+            
+            let day = D + 7 - 7 * Math.floor(D / 7);
+            let month = 3; // Start Monat (März)
+            
+            if (day > 31) {
+                day -= 31;
+                month = 4; // April
+            }
+            // JS Monate sind 0-indiziert (März=2, April=3)
+            return new Date(Date.UTC(Y, month - 1, day, 0, 0, 0, 0)); 
+        }
+
+        /**
+         * Prüft, ob das heutige Datum in der WINTER-Saison liegt (Weihnachten/Neujahr).
+         * Vom 1. November bis zum 2. Januar des Folgejahres.
+         */
+        function isWinterSeason() {
+            const now = new Date();
+            // Nur zur Visualisierung der Datumsberechnung, nicht für die Logik selbst verwendet
+            const currentYear = now.getFullYear(); 
+            
+            const periods = [
+                // Zeitraum 1: Ende des aktuellen Jahres (2025/2026)
+                { start: new Date(`${currentYear}-11-01T00:00:00`), end: new Date(`${currentYear + 1}-01-02T23:59:59`) },
+                // Zeitraum 2: Ende des nächsten Jahres (2026/2027)
+                { start: new Date(`${currentYear + 1}-11-01T00:00:00`), end: new Date(`${currentYear + 2}-01-02T23:59:59`) },
+            ];
+            
+            // Zusätzliche statische Prüfung für 2025, falls das aktuelle Jahr 2025 ist (siehe specialDates)
+             if (currentYear === 2025) {
+                periods.push({ start: new Date('2025-11-01T00:00:00'), end: new Date('2026-01-02T23:59:59') });
+            }
+
+            return periods.some(p => now >= p.start && now <= p.end);
+        }
+
+        /**
+         * Prüft, ob das heutige Datum in der FRÜHLINGS-Saison liegt (Ostern/Pfingsten).
+         * Von einer Woche vor Karfreitag bis Pfingstmontag.
+         */
+        function isSpringSeason() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const periods = [];
+
+            // Prüfe das aktuelle Jahr und das nächste Jahr
+            [currentYear, currentYear + 1].forEach(Y => {
+                const easter = getEasterSunday(Y);
+                
+                // Karfreitag (Good Friday) = Easter - 2 Tage
+                const goodFriday = new Date(easter);
+                goodFriday.setUTCDate(easter.getUTCDate() - 2); 
+
+                // Pfingstmontag (Pentecost Monday) = Easter + 50 Tage
+                const pentecostMonday = new Date(easter);
+                pentecostMonday.setUTCDate(easter.getUTCDate() + 50);
+
+                // Saison Start: Eine Woche vor Karfreitag
+                const seasonStart = new Date(goodFriday);
+                seasonStart.setUTCDate(goodFriday.getUTCDate() - 7); 
+                
+                // Saison Ende: Pfingstmontag
+                const seasonEnd = pentecostMonday;
+                
+                periods.push({ 
+                    start: seasonStart, 
+                    end: seasonEnd 
+                });
+            });
+
+            return periods.some(p => now >= p.start && now <= p.end);
+        }
+
+        /**
+         * Wendet die entsprechenden Tailwind-Klassen und Styles basierend auf der Saison an.
+         */
+        function applySeasonalStyles() {
+            const body = document.body;
+            const isWinter = isWinterSeason();
+            const isSpring = isSpringSeason();
+            
+            // Element-Referenzen
+            const sendButton = document.getElementById('sendButton');
+            const addButton = document.getElementById('addButton');
+            const confirmationCheckbox = document.getElementById('mandatoryConfirmation');
+            const h1Element = document.querySelector('h1');
+            const dateSelects = document.querySelectorAll('.date-select');
+
+
+            // 1. Theme-Klassen und Basis-Styles zurücksetzen (NORMAL-DESIGN)
+            body.classList.remove('winter-theme', 'spring-theme');
+            
+            sendButton.classList.remove('bg-festive-primary', 'hover:bg-red-700', 'bg-spring-primary', 'hover:bg-yellow-800');
+            sendButton.classList.add('bg-primary', 'hover:bg-blue-700');
+            
+            addButton.classList.remove('bg-festive-secondary', 'hover:bg-green-700', 'bg-spring-secondary', 'hover:bg-green-800');
+            addButton.classList.add('bg-secondary', 'hover:bg-green-700');
+
+            confirmationCheckbox.classList.remove('text-festive-primary', 'text-spring-primary');
+            confirmationCheckbox.classList.add('text-primary');
+
+            h1Element.classList.remove('text-festive-primary', 'text-spring-primary');
+            h1Element.classList.add('text-primary');
+
+            // Setze den Focus-Ring für alle existierenden Slots auf Standard zurück
+            dateSelects.forEach(select => {
+                select.classList.remove('focus:ring-festive-secondary', 'focus:border-festive-secondary', 'focus:ring-spring-secondary', 'focus:border-spring-secondary');
+                select.classList.add('focus:ring-secondary', 'focus:border-secondary');
+            });
+
+
+            // 2. Theme-Klassen anwenden
+            if (isWinter) {
+                body.classList.add('winter-theme');
+                
+                // Winter-Styles
+                sendButton.classList.remove('bg-primary', 'hover:bg-blue-700');
+                sendButton.classList.add('bg-festive-primary', 'hover:bg-red-700');
+                addButton.classList.remove('bg-secondary', 'hover:bg-green-700');
+                addButton.classList.add('bg-festive-secondary', 'hover:bg-green-700');
+                confirmationCheckbox.classList.remove('text-primary');
+                confirmationCheckbox.classList.add('text-festive-primary');
+                h1Element.classList.remove('text-primary');
+                h1Element.classList.add('text-festive-primary');
+
+                // Setze den Focus-Ring für Slots (Winter)
+                dateSelects.forEach(select => {
+                    select.classList.remove('focus:ring-secondary', 'focus:border-secondary');
+                    select.classList.add('focus:ring-festive-secondary', 'focus:border-festive-secondary');
+                });
+                
+            } else if (isSpring) {
+                body.classList.add('spring-theme');
+                
+                // Frühlings-Styles
+                sendButton.classList.remove('bg-primary', 'hover:bg-blue-700');
+                sendButton.classList.add('bg-spring-primary', 'hover:bg-purple-700'); 
+                addButton.classList.remove('bg-secondary', 'hover:bg-green-700');
+                addButton.classList.add('bg-spring-secondary', 'hover:bg-green-800'); 
+                confirmationCheckbox.classList.remove('text-primary');
+                confirmationCheckbox.classList.add('text-spring-primary');
+                h1Element.classList.remove('text-primary');
+                h1Element.classList.add('text-spring-primary');
+
+                // Setze den Focus-Ring für Slots (Frühling)
+                dateSelects.forEach(select => {
+                    select.classList.remove('focus:ring-secondary', 'focus:border-secondary');
+                    select.classList.add('focus:ring-spring-secondary', 'focus:border-spring-secondary');
+                });
+            }
+        }
+
 
         /**
          * Hilfsfunktion, um das heutige Datum auf Mitternacht zu normalisieren (YYYY-MM-DD string oder Date object at 00:00:00).
@@ -188,21 +469,31 @@
 
         /**
          * Filtert die specialDates, um nur Daten zu behalten, die heute oder in der Zukunft liegen.
-         * Da specialDates bereits chronologisch sortiert ist, ist die Ausgabe ebenfalls sortiert.
+         * Der Separator wird immer angezeigt.
          * @returns {Array} Gefilterte Array von Datumsobjekten.
          */
         function getFutureDates() {
             const todayNormalized = getTodayNormalized().getTime();
+            const futureDates = [];
 
-            return specialDates.filter(d => {
+            specialDates.forEach(d => {
+                if (d.isSeparator) {
+                    // Füge den Separator immer hinzu
+                    futureDates.push(d);
+                    return;
+                }
+
                 // Erstelle ein Date-Objekt vom Slot-Datum
-                // Der 'T00:00:00' Zusatz stellt sicher, dass das Datum als UTC-Mitternacht interpretiert wird, 
-                // um Zeitzonenprobleme beim Vergleich zu vermeiden.
+                // Der 'T00:00:00' Zusatz stellt sicher, dass das Datum als UTC-Mitternacht interpretiert wird.
                 const slotDate = new Date(d.date + 'T00:00:00');
                 
-                // Ein Slot ist gültig, wenn sein Datum größer oder gleich dem heutigen Datum ist (getTime() in Millisekunden).
-                return slotDate.getTime() >= todayNormalized;
+                // Ein Slot ist gültig, wenn sein Datum größer oder gleich dem heutigen Datum ist.
+                if (slotDate.getTime() >= todayNormalized) {
+                    futureDates.push(d);
+                }
             });
+
+            return futureDates;
         }
 
 
@@ -212,11 +503,20 @@
          */
         function createDateOptions() {
             let options = '<option value="" disabled selected>Datum auswählen...</option>';
-            // getFutureDates liefert die Daten bereits chronologisch sortiert und gefiltert.
             const futureDates = getFutureDates(); 
 
             futureDates.forEach(d => {
-                options += `<option value="${d.date}">${d.label} (${d.date.slice(5)})</option>`;
+                if (d.isSeparator) {
+                    // Spezielle Option für den Trenner (simuliert zwei Linien und eine Überschrift)
+                    options += `<option value="" disabled 
+                                class="bg-gray-100 text-center font-bold text-red-700 
+                                border-t border-b border-gray-400 py-1 select-none">
+                                    ${d.label}
+                                </option>`;
+                } else {
+                    // Normale Option
+                    options += `<option value="${d.date}">${d.label}</option>`;
+                }
             });
             return options;
         }
@@ -256,6 +556,22 @@
                 </div>
             `;
             container.insertAdjacentHTML('beforeend', slotHtml);
+            
+            // Wende die saisonalen Styles auch auf die neu erstellten Selects an, falls nötig
+            const selectElement = container.lastElementChild.querySelector('.date-select');
+            const isSpring = isSpringSeason();
+            const isWinter = isWinterSeason();
+
+            if (isWinter) {
+                selectElement.classList.remove('focus:ring-secondary', 'focus:border-secondary');
+                selectElement.classList.add('focus:ring-festive-secondary', 'focus:border-festive-secondary');
+            } else if (isSpring) {
+                selectElement.classList.remove('focus:ring-secondary', 'focus:border-secondary');
+                selectElement.classList.add('focus:ring-spring-secondary', 'focus:border-spring-secondary');
+            } else {
+                 selectElement.classList.remove('focus:ring-festive-secondary', 'focus:border-festive-secondary', 'focus:ring-spring-secondary', 'focus:border-spring-secondary');
+                selectElement.classList.add('focus:ring-secondary', 'focus:border-secondary');
+            }
         }
 
         /**
@@ -332,10 +648,9 @@
             }
             
             // Textkörper erstellen (wird nur für Teams verwendet)
-            // HINWEIS: Wichtig, da Teams-Empfänger manuell gewählt wird.
             let bodyText = `*** WICHTIG: Bitte senden Sie diese Nachricht an Ihren Vorgesetzten/Teamleiter! ***\n\n`;
             
-            bodyText += `Sehr geehrte Damen und Herren, anbei erhalten Sie meine Daten über die Verfügbarkeit zur vorweihnachtszeit, weihnachten, inkl. feiertage, silvester und neujahr.\n\n`;
+            bodyText += `Sehr geehrte Damen und Herren, anbei erhalten Sie meine Daten über die Verfügbarkeit für Feiertage in Sachsen-Anhalt 2026 sowie die wichtigen Planungstage zur Jahreswende.\n\n`;
             bodyText += `Verfügbarkeit von: ${userName}\n\n`;
             bodyText += "---------------------------------------\n";
 
@@ -398,6 +713,7 @@
 
         // Fügen Sie beim Laden der Seite einen initialen Slot hinzu
         window.onload = () => {
+            applySeasonalStyles(); // Wende die saisonalen Styles an
             addAvailabilitySlot();
             // Optional: Setzen Sie einen Fokus auf den Namen
             document.getElementById('userName').focus();
