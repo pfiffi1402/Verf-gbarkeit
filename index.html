@@ -74,7 +74,7 @@
         /* ------------------------------------------------------------------ */
         .spring-theme {
             /* Hintergrund: Osterthema (generischer) */
-            background-image: url('https://cdn.pixabay.com/photo/2022/02/19/07/21/eggs-7022048_960_720.jpg');
+            background-image: url('https://cdn.pixabay.com/photo/2022/02/19/07/21/eggs-7022048_1280.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -219,6 +219,10 @@
     <script>
         // Array von vordefinierten Feiertagen/relevanten Tagen (Sachsen-Anhalt)
         const specialDates = [
+            
+            // === NEU: TRENNER FÜR DAS AKTUELLE JAHR ===
+            { isSeparator: true, label: 'Feiertage & Planungstage 2025 (ST)' },
+            
             // === PLANUNGSTAGE UND FEIERTAGSVORBEREITUNG 2025 (KEINE KLAMMEREINTRÄGE) ===
             { date: '2025-11-07', label: '07. November' },
             { date: '2025-11-08', label: '08. November' },
@@ -238,7 +242,7 @@
             { date: '2025-12-26', label: '26. Dezember (2. Weihnachtstag)' },
             { date: '2025-12-31', label: '31. Dezember (Silvester)' }, 
             
-            // === TRENNER FÜR DAS NEUE JAHR (wie gewünscht) ===
+            // === TRENNER FÜR DAS NEUE JAHR ===
             { isSeparator: true, label: 'Feiertage & Planungstage 2026 (ST)' },
 
             // === FEIER- UND PLANUNGSTAGE 2026/2027 ===
@@ -390,6 +394,7 @@
             const addButton = document.getElementById('addButton');
             const confirmationCheckbox = document.getElementById('mandatoryConfirmation');
             const h1Element = document.querySelector('h1');
+            // Hole alle existierenden und neuen Datumsauswahlen
             const dateSelects = document.querySelectorAll('.date-select');
 
 
