@@ -622,7 +622,7 @@
             });
 
             if (!allValid) {
-                showMessage('Bitte wählen Sie für jeden Slot ein Datum und eine Uhrzeit (von/bis) aus.', 'error');
+                showMessage('Bitte wählen Sie für jeden Tag ein Datum und eine Uhrzeit (von/bis) aus.', 'error');
                 return null;
             }
             
@@ -632,7 +632,7 @@
             const recipient = 'lue-heim@web.de,michael.lueders@taxi-pfeiffer-blankenburg.de'; 
 
             // Textkörper erstellen
-            let bodyText = `*** Hiermit sende ich, ${userName} meine Verfügbarkeit(en)! ***\n\n`;
+            let bodyText = `<b>Hiermit sende ich, ${userName} meine Verfügbarkeit(en)!</b>\n\n`;
             
                         bodyText += "---------------------------------------\n";
 
@@ -747,6 +747,7 @@
     </script>
 </body>
 </html>
+
 
 
 
