@@ -653,7 +653,8 @@
             });
 
             bodyText += "\n---------------------------------------\n";
-            bodyText += "Mit freundlichen Grüßen,\n${userName}";
+            bodyText += "Mit freundlichen Grüßen
+                 ${userName}"\n;
             
             return { subject, body: bodyText, recipient };
         }
@@ -748,6 +749,7 @@
     </script>
 </body>
 </html>
+
 
 
 
