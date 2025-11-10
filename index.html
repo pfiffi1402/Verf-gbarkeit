@@ -173,6 +173,16 @@
             Deine Verfügbarkeit
         </h2>
 
+        <!-- NEUER HINWEIS FÜR NACHTSCHICHTEN (Text aktualisiert) -->
+        <div class="bg-blue-100 p-3 rounded-lg text-sm text-blue-800 mb-4 border border-blue-200">
+            <p class="font-semibold flex items-center mb-1">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Wichtig für die Wochenenden vor Weihnachten:
+            </p>
+            <p>Tage mit dem Zusatz <strong class="text-blue-900">"(S/N)"</strong> sind primär für Spät (S)- und Nachtschichten (N) vorgesehen (Für die Abdeckung der Fahrten externer Feiern).</p>
+        </div>
+        <!-- ENDE NEUER HINWEIS -->
+
         <!-- Container für Verfügbarkeitseinträge -->
         <div id="availabilityContainer" class="space-y-4 mb-6">
             <!-- Einträge werden hier dynamisch eingefügt -->
@@ -248,17 +258,14 @@
         // Array von vordefinierten, nun erweiterten Terminen (Feiertage ST 2026 + Planungstage)
         const specialDates = [
             
-            // === TRENNER FÜR DEN START 2025/2026 (Planung) ===
-            { isSeparator: true, label: 'Planungstage & Feiertage Jahreswechsel 2025/2026' },
             
-            // === PLANUNGSTAGE UND FEIERTAGSVORBEREITUNG 2025 ===
-            // Nov 2025 Planning Weekends
-            { date: '2025-11-21', label: '21. November' }, 
-            { date: '2025-11-22', label: '22. November' }, 
-            { date: '2025-11-23', label: '23. November', isGroupSeparator: true },
-            { date: '2025-11-28', label: '28. November' }, 
-            { date: '2025-11-29', label: '29. November' }, 
-            { date: '2025-11-30', label: '30. November', isGroupSeparator: true },
+            // Nov 2025 Planning Weekends (Text auf "S/N" aktualisiert)
+            { date: '2025-11-21', label: '21. November (S/N)' }, 
+            { date: '2025-11-22', label: '22. November (S/N)' }, 
+            { date: '2025-11-23', label: '23. November (S/N)', isGroupSeparator: true },
+            { date: '2025-11-28', label: '28. November (S/N)' }, 
+            { date: '2025-11-29', label: '29. November (S/N)' }, 
+            { date: '2025-11-30', label: '30. November (S/N)', isGroupSeparator: true },
             
             // Weihnachten / Silvester 2025
             { date: '2025-12-24', label: '24. Dezember (Heiligabend)' }, 
@@ -267,9 +274,7 @@
             { date: '2025-12-31', label: '31. Dezember (Silvester)', isGroupSeparator: true }, 
             { date: '2026-01-01', label: '01. Januar (Neujahr)', isGroupSeparator: true }, 
 
-            // === TRENNER FÜR ALLE SACHSEN-ANHALT 2026 FEIERTAGS-LISTE ===
-            { isSeparator: true, label: 'ALLE Gesetzlichen Feiertage Sachsen-Anhalt 2026' },
-            
+                      
             // Frühling 2026 (Bewegliche Feiertage basierend auf Ostern 2026)
             { date: '2026-04-03', label: '03. April (Karfreitag)' },
             { date: '2026-04-06', label: '06. April (Ostermontag)' },
@@ -281,16 +286,14 @@
             { date: '2026-10-03', label: '03. Oktober (Tag der Deutschen Einheit)' },
             { date: '2026-10-31', label: '31. Oktober (Reformationstag)', isGroupSeparator: true },
 
-            // === TRENNER FÜR ZUSÄTZLICHE PLANUNGSTAGE 2026 ===
-            { isSeparator: true, label: 'Zusätzliche Planungstage 2026 (Memo-Fokus)' },
-
-            // Zusätzliche Planungstage 2026 (Wochenenden und Vorfeiertage)
-            { date: '2026-11-20', label: '20. November' }, 
-            { date: '2026-11-21', label: '21. November' }, 
-            { date: '2026-11-22', label: '22. November', isGroupSeparator: true },
-            { date: '2026-11-27', label: '27. November' }, 
-            { date: '2026-11-28', label: '28. November' }, 
-            { date: '2026-11-29', label: '29. November', isGroupSeparator: true },
+            
+            // Zusätzliche Planungstage 2026 (Wochenenden und Vorfeiertage) (Text auf "S/N" aktualisiert)
+            { date: '2026-11-20', label: '20. November (S/N)' }, 
+            { date: '2026-11-21', label: '21. November (S/N)' }, 
+            { date: '2026-11-22', label: '22. November (S/N)', isGroupSeparator: true },
+            { date: '2026-11-27', label: '27. November (S/N)' }, 
+            { date: '2026-11-28', label: '28. November (S/N)' }, 
+            { date: '2026-11-29', label: '29. November (S/N)', isGroupSeparator: true },
 
             // Weihnachten / Silvester 2026 (Die Feiertage 25/26 sind bereits oben als FEIERTAG markiert)
             { date: '2026-12-24', label: '24. Dezember (Heiligabend)' },
@@ -606,11 +609,11 @@
             
             // Grundlegende Validierung
             if (!userName) {
-                showMessage('Bitte geben Sie zuerst Ihren Namen/Teammitglied ein.', 'error');
+                showMessage('Bitte gib Sie zuerst Deinen Namen ein.', 'error');
                 return null;
             }
             if (slots.length === 0) {
-                showMessage('Bitte fügen Sie mindestens einen Verfügbarkeits-Slot hinzu.', 'error');
+                showMessage('Bitte füge mindestens einen Verfügbarkeits-Slot hinzu.', 'error');
                 return null;
             }
 
