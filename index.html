@@ -657,6 +657,7 @@
             
             // Betreff (wird für WhatsApp nicht verwendet, aber für die Vollständigkeit des Objekts beibehalten)
             const subject = replaceGermanUmlauts(`Verfuegbarkeit ${userName}`); 
+            // Die Empfänger-E-Mail-Adressen werden hier nicht mehr benötigt, bleiben aber im Objekt
             const recipient = 'lue-heim@web.de,michael.lueders@taxi-pfeiffer-blankenburg.de'; 
 
             // Textkörper erstellen
@@ -695,6 +696,9 @@
          * Führt die Validierung durch und sendet den Inhalt direkt via WhatsApp.
          */
         function sendViaWhatsApp() {
+            // HIER DIE ZIELNUMMER EINFÜGEN (mit Ländervorwahl, ohne + oder 00)
+            const targetNumber = '4917684684365'; // <--- BITTE HIER DURCH DIE ECHTE NUMMER ERSETZEN (z.B. 491719876543)
+            
             const confirmationCheckbox = document.getElementById('mandatoryConfirmation');
             if (!confirmationCheckbox.checked) {
                 return showMessage('Bitte bestätigen Sie die Zusage, indem Sie das Kästchen ankreuzen.', 'error');
@@ -703,21 +707,21 @@
             const content = getFormattedBodyText();
             if (!content) return;
             
-            // Speichere den Inhalt global für den Fall, dass die Nachricht später noch gebraucht wird.
+            // Speichere den Inhalt global 
             sharedContent = content; 
 
-            // WhatsApp-Share-Link erzeugen
+            // WhatsApp-Share-Link erzeugen: NEUER LINK mit fester Nummer
             
             // 1. Umlaute durch ae/oe/ue ersetzen
             const cleanBody = replaceGermanUmlauts(sharedContent.body); 
             // 2. Den bereinigten Text für die URL kodieren
             const body = encodeURIComponent(cleanBody); 
             
-            // WhatsApp Link (ohne feste Nummer, um den Empfänger-Dialog zu öffnen)
-            const whatsappLink = `https://wa.me/?text=${body}`;
+            // NEUER WhatsApp Link mit fester Nummer
+            const whatsappLink = `https://wa.me/${targetNumber}?text=${body}`;
 
             window.open(whatsappLink, '_blank', 'noopener,noreferrer');
-            showMessage('WhatsApp wird geöffnet. Bitte wählen Sie nun den Empfänger/Kontakt aus!', 'success');
+            showMessage(`WhatsApp wird geöffnet. Die Nachricht geht direkt an die Nummer ${targetNumber}.`, 'success');
         }
 
 
