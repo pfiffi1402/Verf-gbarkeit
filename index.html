@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verfügbarkeitsplaner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* ------------------------------------------------------------------ */
@@ -23,9 +23,9 @@
             color: #1D4ED8; /* Standard-Blau */
             text-shadow: none;
         }
-        /* H2 erbt standardmäßig von body (Inter) und wird saisonal von h1 überschrieben */
+        /* H2 MUSS Inter bleiben, um Umlaute korrekt darzustellen (Umlaut-Fix) */
         h2 {
-            font-family: 'Inter', sans-serif; /* H2 bleibt Inter als Fallback */
+            font-family: 'Inter', sans-serif;
         }
         
         /* Standard-App-Container-Design */
@@ -56,19 +56,17 @@
             z-index: -1;
         }
 
-        /* Winterliche Schrift und Farbe: JETZT Sacramento */
+        /* Winterliche Schrift und Farbe: NUR H1 bekommt Great Vibes! */
         .winter-theme h1 {
-            font-family: 'Sacramento', cursive; /* Neu: Sacramento unterstützt Umlaute */
-            font-size: 4.5rem; /* Größer für Sacramento */
+            font-family: 'Great Vibes', cursive; /* Festliche Schrift */
+            /* Schriftgröße wird über Tailwind-Klassen in HTML gesteuert (text-4xl/sm:text-5xl) */
             color: #B91C1C; /* Sattes Weihnachtsrot (festive-primary) */
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
         
-        /* H2 WIRD NUN AUCH FESTLICH, da Sacramento Umlaute kann */
+        /* H2 BLEIBT INTER FÜR UMLAUTE */
         .winter-theme h2 {
-            font-family: 'Sacramento', cursive;
-            font-weight: 400; /* Leichter für Sacramento */
-            font-size: 2.5rem; 
+            font-family: 'Inter', sans-serif; 
         }
 
         /* Winterlicher App-Container */
@@ -99,19 +97,17 @@
             z-index: -1;
         }
 
-        /* Frühlings-Schrift und Farbe: JETZT Sacramento */
+        /* Frühlings-Schrift und Farbe: NUR H1 bekommt Great Vibes! */
         .spring-theme h1 {
-            font-family: 'Sacramento', cursive; /* Neu: Sacramento unterstützt Umlaute */
-            font-size: 4.5rem; /* Größer für Sacramento */
+            font-family: 'Great Vibes', cursive; /* Festliche Schrift */
+             /* Schriftgröße wird über Tailwind-Klassen in HTML gesteuert (text-4xl/sm:text-5xl) */
             color: #9D00FF; /* Helles Lila/Violett */
             text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
         }
 
-        /* H2 WIRD NUN AUCH FESTLICH, da Sacramento Umlaute kann */
+        /* H2 BLEIBT INTER FÜR UMLAUTE */
         .spring-theme h2 {
-            font-family: 'Sacramento', cursive;
-            font-weight: 400; /* Leichter für Sacramento */
-            font-size: 2.5rem;
+            font-family: 'Inter', sans-serif;
         }
 
         /* Frühlingshafter App-Container */
@@ -399,7 +395,6 @@
             // Setze H1/H2 Klassen zurück
             h1Element.classList.remove('text-festive-primary', 'text-spring-primary');
             h1Element.classList.add('text-primary'); // Standardfarbe
-            h1Element.classList.remove('text-5xl'); // Entferne temporäre Größe für Sacramento
 
             h2Elements.forEach(h2 => {
                  h2.classList.remove('text-festive-primary', 'text-spring-primary');
@@ -418,9 +413,9 @@
                 
                 // H1
                 h1Element.classList.remove('text-primary');
-                h1Element.classList.add('text-festive-primary', 'text-5xl'); // Füge text-5xl für H1 hinzu (Sacramento ist klein)
-
-                // H2
+                h1Element.classList.add('text-festive-primary'); 
+                
+                // H2 (Farbe nur, Schrift ist fest Inter im CSS)
                 h2Elements.forEach(h2 => {
                      h2.classList.add('text-festive-primary');
                 });
@@ -436,9 +431,9 @@
                 
                 // H1
                 h1Element.classList.remove('text-primary');
-                h1Element.classList.add('text-spring-primary', 'text-5xl'); // Füge text-5xl für H1 hinzu (Sacramento ist klein)
+                h1Element.classList.add('text-spring-primary'); 
 
-                // H2
+                // H2 (Farbe nur, Schrift ist fest Inter im CSS)
                 h2Elements.forEach(h2 => {
                      h2.classList.add('text-spring-primary');
                 });
