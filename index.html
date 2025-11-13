@@ -4,31 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verfügbarkeitsplaner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* ------------------------------------------------------------------ */
         /* BASIS-STYLES (NORMALES DESIGN) */
         /* ------------------------------------------------------------------ */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', sans-serif; /* Inter ist der Standard-Font */
             background-color: #f7f7f7; /* Helles Grau als neutraler Hintergrund */
             color: #333;
             position: relative;
         }
 
-        /* Standard-Überschriften-Design */
-        h1, h2 {
-            font-family: 'Inter', sans-serif;
-        }
+        /* H1 ist die Hauptüberschrift (Standard: Inter) */
         h1 {
+            font-family: 'Inter', sans-serif;
             color: #1D4ED8; /* Standard-Blau */
             text-shadow: none;
+        }
+        /* H2 erbt standardmäßig von body (Inter) und wird saisonal von h1 überschrieben */
+        h2 {
+            font-family: 'Inter', sans-serif; /* H2 bleibt Inter als Fallback */
         }
         
         /* Standard-App-Container-Design */
         #app {
-            /* Hintergrund-Transparenz wurde zu bg-white/90 geändert */
             border: 1px solid #E5E7EB; /* Heller neutraler Rahmen */
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Leichter Schatten */
         }
@@ -55,15 +56,21 @@
             z-index: -1;
         }
 
-        /* Winterliche Schrift und Farbe für Überschriften */
-        .winter-theme h1, .winter-theme h2 {
-            font-family: 'Great Vibes', cursive;
-        }
+        /* Winterliche Schrift und Farbe: JETZT Sacramento */
         .winter-theme h1 {
+            font-family: 'Sacramento', cursive; /* Neu: Sacramento unterstützt Umlaute */
+            font-size: 4.5rem; /* Größer für Sacramento */
             color: #B91C1C; /* Sattes Weihnachtsrot (festive-primary) */
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
         
+        /* H2 WIRD NUN AUCH FESTLICH, da Sacramento Umlaute kann */
+        .winter-theme h2 {
+            font-family: 'Sacramento', cursive;
+            font-weight: 400; /* Leichter für Sacramento */
+            font-size: 2.5rem; 
+        }
+
         /* Winterlicher App-Container */
         .winter-theme #app {
             border: 3px solid #D9B36E; /* Goldener Rahmen */
@@ -82,7 +89,7 @@
         }
         /* Overlay für frühlingshaftes Bild */
         .spring-theme::before {
-            content: "";
+            content = "";
             position: absolute;
             top: 0;
             left: 0;
@@ -92,13 +99,19 @@
             z-index: -1;
         }
 
-        /* Frühlings-Schrift und Farbe für Überschriften */
-        .spring-theme h1, .spring-theme h2 {
-            font-family: 'Great Vibes', cursive;
-        }
+        /* Frühlings-Schrift und Farbe: JETZT Sacramento */
         .spring-theme h1 {
+            font-family: 'Sacramento', cursive; /* Neu: Sacramento unterstützt Umlaute */
+            font-size: 4.5rem; /* Größer für Sacramento */
             color: #9D00FF; /* Helles Lila/Violett */
             text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* H2 WIRD NUN AUCH FESTLICH, da Sacramento Umlaute kann */
+        .spring-theme h2 {
+            font-family: 'Sacramento', cursive;
+            font-weight: 400; /* Leichter für Sacramento */
+            font-size: 2.5rem;
         }
 
         /* Frühlingshafter App-Container */
@@ -108,7 +121,7 @@
         }
 
 
-        /* Modal Overlay */
+        /* Modal Overlay (wird nicht mehr verwendet, aber im Code belassen) */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -195,47 +208,17 @@
                 </label>
             </div>
             
-            <button onclick="showShareOptions()"
+            <button onclick="sendViaWhatsApp()"
                     id="sendButton"
-                    class="w-full px-6 py-3 text-white text-lg font-bold rounded-lg transition duration-150 shadow-xl flex items-center justify-center">
-                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                Verfügbarkeit verbindlich senden
+                    class="w-full px-6 py-3 text-white text-lg font-bold rounded-lg transition duration-150 shadow-xl flex items-center justify-center bg-whatsapp hover:bg-green-600">
+                 <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 0c-6.627 0-12 5.373-12 12s5.373 12 12 12c3.313 0 6.302-1.332 8.485-3.515l.002-.002.002-.002 1.976-1.976-1.89-1.89-1.89 1.89-.92-.92c-1.637 1.637-3.882 2.656-6.31 2.656-4.97 0-9.01-4.04-9.01-9.01s4.04-9.01 9.01-9.01c4.97 0 9.01 4.04 9.01 9.01 0 2.428-1.02 4.673-2.656 6.31l.92.92 1.89-1.89 1.89 1.89-1.976 1.976-.002.002-.002.002c-2.183 2.183-5.257 3.515-8.485 3.515-6.627 0-12-5.373-12-12s5.373-12 12-12zm-3.04 7.04h-2v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg>
+                Verfügbarkeit per WhatsApp senden
             </button>
             <p id="messageBox" class="text-center mt-4 p-3 bg-yellow-100 text-yellow-800 rounded-lg hidden"></p>
         </div>
     </div>
 
-    <div id="shareModal" class="modal-overlay hidden">
-        <div class="bg-white rounded-lg shadow-2xl p-6 w-11/12 max-w-md transform transition-all duration-300 scale-100">
-            <h3 class="text-xl font-bold text-gray-800 mb-4">Übermittlung starten (Fallback)</h3>
-            <p class="text-gray-600 mb-6">Ihr Gerät unterstützt die automatische Freigabe nicht. Bitte wählen Sie manuell:</p>
-
-            <div class="space-y-4">
-                <button onclick="sendViaEmail()"
-                    class="w-full px-4 py-3 bg-email text-white font-semibold rounded-lg hover:bg-red-700 transition duration-150 flex items-center justify-center">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
-                    Per E-Mail senden (An: lue-heim@web.de und Michael Lüders)
-                </button>
-                
-                <button onclick="sendViaTeams()"
-                        class="w-full px-4 py-3 bg-teams text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-150 flex items-center justify-center">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12c0 3.397 1.344 6.471 3.535 8.793l.002.001.002.001L12 24l8.461-3.205c2.191-2.322 3.535-5.396 3.535-8.794C24 5.373 18.627 0 12 0zm-5.45 15.65h-2.1V8.35h2.1v7.3zm4.55 0h-2v2h2v-2zm4.55 0h-2v2h2v-2z"/></svg>
-                    Per Teams-Chat senden
-                </button>
-                
-                <button onclick="sendViaWhatsApp()"
-                    class="w-full px-4 py-3 bg-whatsapp text-white font-semibold rounded-lg hover:bg-green-600 transition duration-150 flex items-center justify-center">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 0c-6.627 0-12 5.373-12 12s5.373 12 12 12c3.313 0 6.302-1.332 8.485-3.515l.002-.002.002-.002 1.976-1.976-1.89-1.89-1.89 1.89-.92-.92c-1.637 1.637-3.882 2.656-6.31 2.656-4.97 0-9.01-4.04-9.01-9.01s4.04-9.01 9.01-9.01c4.97 0 9.01 4.04 9.01 9.01 0 2.428-1.02 4.673-2.656 6.31l.92.92 1.89-1.89 1.89 1.89-1.976 1.976-.002.002-.002.002c-2.183 2.183-5.257 3.515-8.485 3.515-6.627 0-12-5.373-12-12s5.373-12 12-12zm-3.04 7.04h-2v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg>
-                    Per WhatsApp senden
-                </button>
-            </div>
-            
-            <button onclick="document.getElementById('shareModal').classList.add('hidden')"
-                    class="w-full mt-4 px-4 py-2 text-gray-500 font-semibold rounded-lg border border-gray-300 hover:bg-gray-100 transition duration-150">
-                Abbrechen
-            </button>
-        </div>
-    </div>
+    <div id="shareModal" class="modal-overlay hidden"></div>
 
 
     <script>
@@ -251,13 +234,26 @@
             { date: '2025-11-29', label: '29. November 2025 (S/N)' }, 
             { date: '2025-11-30', label: '30. November 2025 (S/N)', isGroupSeparator: true },
             
+            // Dezember 2025 Wochenenden (S/N)
+            { date: '2025-12-05', label: '05. Dezember 2025 (S/N)' },
+            { date: '2025-12-06', label: '06. Dezember 2025 (S/N)' },
+            { date: '2025-12-07', label: '07. Dezember 2025 (S/N)', isGroupSeparator: true },
+
+            { date: '2025-12-12', label: '12. Dezember 2025 (S/N)' },
+            { date: '2025-12-13', label: '13. Dezember 2025 (S/N)' },
+            { date: '2025-12-14', label: '14. Dezember 2025 (S/N)', isGroupSeparator: true },
+
+            { date: '2025-12-19', label: '19. Dezember 2025 (S/N)' },
+            { date: '2025-12-20', label: '20. Dezember 2025 (S/N)' },
+            { date: '2025-12-21', label: '21. Dezember 2025 (S/N)', isGroupSeparator: true },
+            
             // Weihnachten / Silvester 2025 / Heilige Drei Könige 2026
             { date: '2025-12-24', label: '24. Dezember 2025 (Heiligabend)' }, 
             { date: '2025-12-25', label: '25. Dezember 2025 (1. Weihnachtstag)' },
             { date: '2025-12-26', label: '26. Dezember 2025 (2. Weihnachtstag)' },
             { date: '2025-12-31', label: '31. Dezember 2025 (Silvester)' }, 
             { date: '2026-01-01', label: '01. Januar 2026 (Neujahr)' }, 
-            { date: '2026-01-06', label: '06. Januar 2026 (Heilige Drei Könige/Feiertag ST)', isGroupSeparator: true }, // NEU: 6. Januar 2026
+            { date: '2026-01-06', label: '06. Januar 2026 (Heilige Drei Könige/Feiertag ST)', isGroupSeparator: true }, 
 
                       
             // Frühling 2026 (Bewegliche Feiertage basierend auf Ostern 2026)
@@ -279,6 +275,19 @@
             { date: '2026-11-27', label: '27. November 2026 (S/N)' }, 
             { date: '2026-11-28', label: '28. November 2026 (S/N)' }, 
             { date: '2026-11-29', label: '29. November 2026 (S/N)', isGroupSeparator: true },
+            
+            // Dezember 2026 Wochenenden (S/N)
+            { date: '2026-12-04', label: '04. Dezember 2026 (S/N)' },
+            { date: '2026-12-05', label: '05. Dezember 2026 (S/N)' },
+            { date: '2026-12-06', label: '06. Dezember 2026 (S/N)', isGroupSeparator: true },
+
+            { date: '2026-12-11', label: '11. Dezember 2026 (S/N)' },
+            { date: '2026-12-12', label: '12. Dezember 2026 (S/N)' },
+            { date: '2026-12-13', label: '13. Dezember 2026 (S/N)', isGroupSeparator: true },
+
+            { date: '2026-12-18', label: '18. Dezember 2026 (S/N)' },
+            { date: '2026-12-19', label: '19. Dezember 2026 (S/N)' },
+            { date: '2026-12-20', label: '20. Dezember 2026 (S/N)', isGroupSeparator: true },
 
             // Weihnachten / Silvester 2026 / Heilige Drei Könige 2027
             { date: '2026-12-24', label: '24. Dezember 2026 (Heiligabend)' },
@@ -286,10 +295,10 @@
             { date: '2026-12-26', label: '26. Dezember 2026 (2.Weihnachtstag)' },
             { date: '2026-12-31', label: '31. Dezember 2026 (Silvester)' },
             { date: '2027-01-01', label: '01. Januar 2027 (Neujahr)' },
-            { date: '2027-01-06', label: '06. Januar 2027 (Heilige Drei Könige/Feiertag ST)', isGroupSeparator: true }, // NEU: 6. Januar 2027
+            { date: '2027-01-06', label: '06. Januar 2027 (Heilige Drei Könige/Feiertag ST)', isGroupSeparator: true },
         ];
         
-        // Globale Variable, um den Betreff, Body und Empfänger zu speichern
+        // Globale Variable, um den Betreff, Body und Empfänger zu speichern (wird hier nur für den Body benötigt)
         let sharedContent = {}; 
 
         /**
@@ -381,51 +390,64 @@
             const addButton = document.getElementById('addButton');
             const confirmationCheckbox = document.getElementById('mandatoryConfirmation');
             const h1Element = document.querySelector('h1');
-            // Selectoren müssen aktualisiert werden, da die Slots dynamisch erzeugt werden
-            // Wir müssen die Klassen erst beim Erstellen der Slots neu setzen oder hier ein Listener aufrufen.
-            // Besser: Beim Erstellen des Slots anwenden (siehe addAvailabilitySlot). Hier nur die statischen Elemente.
+            const h2Elements = document.querySelectorAll('h2');
 
 
             // 1. Theme-Klassen und Basis-Styles zurücksetzen (NORMAL-DESIGN)
             body.classList.remove('winter-theme', 'spring-theme');
             
-            sendButton.classList.remove('bg-festive-primary', 'hover:bg-red-700', 'bg-spring-primary', 'hover:bg-purple-700');
-            sendButton.classList.add('bg-primary', 'hover:bg-blue-700');
+            // Setze H1/H2 Klassen zurück
+            h1Element.classList.remove('text-festive-primary', 'text-spring-primary');
+            h1Element.classList.add('text-primary'); // Standardfarbe
+            h1Element.classList.remove('text-5xl'); // Entferne temporäre Größe für Sacramento
+
+            h2Elements.forEach(h2 => {
+                 h2.classList.remove('text-festive-primary', 'text-spring-primary');
+            });
             
+            // Setze Button-Styles zurück
             addButton.classList.remove('bg-festive-secondary', 'hover:bg-green-700', 'bg-spring-secondary', 'hover:bg-green-800');
             addButton.classList.add('bg-secondary', 'hover:bg-green-700');
 
             confirmationCheckbox.classList.remove('text-festive-primary', 'text-spring-primary');
             confirmationCheckbox.classList.add('text-primary');
 
-            h1Element.classList.remove('text-festive-primary', 'text-spring-primary');
-            h1Element.classList.add('text-primary');
-
             // 2. Theme-Klassen anwenden
             if (isWinter) {
                 body.classList.add('winter-theme');
                 
-                sendButton.classList.remove('bg-primary', 'hover:bg-blue-700');
-                sendButton.classList.add('bg-festive-primary', 'hover:bg-red-700');
+                // H1
+                h1Element.classList.remove('text-primary');
+                h1Element.classList.add('text-festive-primary', 'text-5xl'); // Füge text-5xl für H1 hinzu (Sacramento ist klein)
+
+                // H2
+                h2Elements.forEach(h2 => {
+                     h2.classList.add('text-festive-primary');
+                });
+                
+                // Buttons/Checkbox
                 addButton.classList.remove('bg-secondary', 'hover:bg-green-700');
                 addButton.classList.add('bg-festive-secondary', 'hover:bg-green-700');
                 confirmationCheckbox.classList.remove('text-primary');
                 confirmationCheckbox.classList.add('text-festive-primary');
-                h1Element.classList.remove('text-primary');
-                h1Element.classList.add('text-festive-primary');
-
                 
             } else if (isSpring) {
                 body.classList.add('spring-theme');
                 
-                sendButton.classList.remove('bg-primary', 'hover:bg-blue-700');
-                sendButton.classList.add('bg-spring-primary', 'hover:bg-purple-700'); 
+                // H1
+                h1Element.classList.remove('text-primary');
+                h1Element.classList.add('text-spring-primary', 'text-5xl'); // Füge text-5xl für H1 hinzu (Sacramento ist klein)
+
+                // H2
+                h2Elements.forEach(h2 => {
+                     h2.classList.add('text-spring-primary');
+                });
+                
+                // Buttons/Checkbox
                 addButton.classList.remove('bg-secondary', 'hover:bg-green-700');
                 addButton.classList.add('bg-spring-secondary', 'hover:bg-green-800'); 
                 confirmationCheckbox.classList.remove('text-primary');
                 confirmationCheckbox.classList.add('text-spring-primary');
-                h1Element.classList.remove('text-primary');
-                h1Element.classList.add('text-spring-primary');
             }
         }
 
@@ -579,13 +601,27 @@
                 box.classList.add('bg-yellow-100', 'text-yellow-800');
             }
             box.classList.remove('hidden'); 
-            setTimeout(() => box.classList.add('hidden'), 5000);
+            // Wichtig: Timeout für WhatsApp, da der User direkt weitergeleitet wird
+            setTimeout(() => box.classList.add('hidden'), 8000); 
             box.scrollIntoView({ behavior: 'smooth' });
         }
         
         /**
+         * Hilfsfunktion zum Ersetzen von Umlauten durch ae/oe/ue (für URL-Kodierung).
+         */
+        function replaceGermanUmlauts(text) {
+            return text
+                .replace(/ä/g, 'ae') 
+                .replace(/ö/g, 'oe') 
+                .replace(/ü/g, 'ue') 
+                .replace(/Ä/g, 'Ae') 
+                .replace(/Ö/g, 'Oe') 
+                .replace(/Ü/g, 'Ue')
+                .replace(/ß/g, 'ss'); // ß zu ss umwandeln
+        }
+
+        /**
          * Sammelt und formatiert die Verfügbarkeitsdaten.
-         * Gibt ein Objekt mit Betreff, Body und Empfänger zurück.
          * @returns {{subject: string, body: string, recipient: string}|null} 
          */
         function getFormattedBodyText() {
@@ -624,9 +660,8 @@
                 return null;
             }
             
-            // Betreff für E-Mail und Web Share API
-            const subject = `Verfügbarkeit ${userName}`;
-            // NEU: Liste der Empfänger-E-Mail-Adressen (Komma-separiert für mailto: Link)
+            // Betreff (wird für WhatsApp nicht verwendet, aber für die Vollständigkeit des Objekts beibehalten)
+            const subject = replaceGermanUmlauts(`Verfuegbarkeit ${userName}`); 
             const recipient = 'lue-heim@web.de,michael.lueders@taxi-pfeiffer-blankenburg.de'; 
 
             // Textkörper erstellen
@@ -637,13 +672,10 @@
 
             entries.sort((a, b) => new Date(a.date) - new Date(b.date)); 
 
-            // ======================================================
-            // KORRIGIERTER CODEBLOCK (Verwendet lokale Datumsfunktionen)
-            // ======================================================
+            // Füge die Verfügbarkeitseinträge hinzu
             entries.forEach(entry => {
                 const dateObj = new Date(entry.date + 'T00:00:00');
                 
-                // KORREKTUR: Verwende die lokalen Datumsfunktionen (getDate, getMonth, getFullYear)
                 const day = String(dateObj.getDate()).padStart(2, '0');
                 const month = String(dateObj.getMonth() + 1).padStart(2, '0');
                 const year = dateObj.getFullYear();
@@ -654,9 +686,6 @@
 
                 bodyText += `${customDate}: Von ${entry.start} Uhr bis ${entry.end} Uhr\n`;
             });
-            // ======================================================
-            // ENDE DES KORRIGIERTEN CODEBLOCKS
-            // ======================================================
 
             bodyText += "\n---------------------------------------\n";
             bodyText += "Bitte übernehmen Sie diese Zeiten in den Schichtplan.\n\n"
@@ -668,9 +697,9 @@
 
 
         /**
-         * Führt die Validierung durch und nutzt entweder die Native Share API oder das Fallback-Modal.
+         * Führt die Validierung durch und sendet den Inhalt direkt via WhatsApp.
          */
-        function showShareOptions() {
+        function sendViaWhatsApp() {
             const confirmationCheckbox = document.getElementById('mandatoryConfirmation');
             if (!confirmationCheckbox.checked) {
                 return showMessage('Bitte bestätigen Sie die Zusage, indem Sie das Kästchen ankreuzen.', 'error');
@@ -679,70 +708,21 @@
             const content = getFormattedBodyText();
             if (!content) return;
             
-            // Speichere den Inhalt global für Fallback-Buttons (Teams, WhatsApp, Email)
+            // Speichere den Inhalt global für den Fall, dass die Nachricht später noch gebraucht wird.
             sharedContent = content; 
 
-            if (navigator.share) {
-                // PRIO 1: Native Web Share API (für mobile Geräte)
-                navigator.share({
-                    title: content.subject,
-                    text: content.body, 
-                    // Optional: url: '...'
-                }).then(() => {
-                    showMessage('Verfügbarkeit wurde erfolgreich über die Freigabe-Liste geteilt.', 'success');
-                }).catch((error) => {
-                    // Der AbortError tritt auf, wenn der Benutzer das Teilen abbricht. Das ist normal.
-                    if (error.name !== 'AbortError') {
-                         console.error('Fehler beim Teilen über Web Share API:', error);
-                    }
-                    // Wichtig: Beim Abbrechen zeigen wir KEINE Fehlermeldung, um die native UX nicht zu stören.
-                });
-            } else {
-                // PRIO 2: Fallback für Desktop oder Browser ohne Web Share API
-                document.getElementById('shareModal').classList.remove('hidden');
-            }
-        }
-        
-        /**
-         * Erzeugt den Teams-Share-Link. (Verwendet Fallback-Content)
-         */
-        function sendViaTeams() {
-            document.getElementById('shareModal').classList.add('hidden');
+            // WhatsApp-Share-Link erzeugen
             
-            const body = encodeURIComponent(sharedContent.body); 
+            // 1. Umlaute durch ae/oe/ue ersetzen
+            const cleanBody = replaceGermanUmlauts(sharedContent.body); 
+            // 2. Den bereinigten Text für die URL kodieren
+            const body = encodeURIComponent(cleanBody); 
             
-            // Teams Share Link
-            window.open(`https://teams.microsoft.com/share?text=${body}`, '_blank', 'noopener,noreferrer');
-            showMessage('Teams-Dialog wurde geöffnet. Bitte wählen Sie nun den Empfänger manuell aus!', 'success');
-        }
-
-        /**
-         * Erzeugt den WhatsApp-Share-Link. (Verwendet Fallback-Content)
-         */
-        function sendViaWhatsApp() {
-            document.getElementById('shareModal').classList.add('hidden');
-            
-            const body = encodeURIComponent(sharedContent.body); 
+            // WhatsApp Link (ohne feste Nummer, um den Empfänger-Dialog zu öffnen)
             const whatsappLink = `https://wa.me/?text=${body}`;
 
             window.open(whatsappLink, '_blank', 'noopener,noreferrer');
-            showMessage('WhatsApp-Dialog wurde geöffnet. Bitte wählen Sie nun den Empfänger/Kontakt manuell aus!', 'success');
-        }
-
-        /**
-         * Erzeugt den Mailto-Link mit vorausgefülltem Empfänger, Betreff und Body. (Verwendet Fallback-Content)
-         */
-        function sendViaEmail() {
-            document.getElementById('shareModal').classList.add('hidden');
-            
-            // sharedContent.recipient enthält jetzt beide, Komma-separiert
-            const recipient = sharedContent.recipient; 
-            const subject = encodeURIComponent(sharedContent.subject);
-            const body = encodeURIComponent(sharedContent.body);
-            
-            const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
-            window.open(mailtoLink, '_blank');
-            showMessage('E-Mail-Anwendung wurde geöffnet. Die Empfänger und der Text sind vorausgefüllt.', 'success');
+            showMessage('WhatsApp wird geöffnet. Bitte wählen Sie nun den Empfänger/Kontakt aus!', 'success');
         }
 
 
@@ -756,4 +736,3 @@
     </script>
 </body>
 </html>
-
