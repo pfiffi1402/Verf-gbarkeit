@@ -170,7 +170,7 @@
             </h2>
             <label for="userName" class="block text-sm font-medium text-gray-700 mb-1 sr-only">Dein Name /</label>
             <input type="text" id="userName" placeholder="Max Mustermann"
-                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150" required>
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150" required oninput="saveData()">
             <p class="text-xs text-gray-600 mt-1">Dieser Name wird in der Nachricht verwendet.</p>
         </div>
         
@@ -189,7 +189,7 @@
         <div id="availabilityContainer" class="space-y-4 mb-6">
             </div>
 
-        <button onclick="addAvailabilitySlot()"
+        <button onclick="addAvailabilitySlot(); saveData();"
                 id="addButton"
                 class="w-full sm:w-auto px-4 py-2 mb-8 text-white font-semibold rounded-lg transition duration-150 shadow-md flex items-center justify-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
@@ -296,6 +296,10 @@
         
         // Globale Variable, um den Betreff, Body und Empfänger zu speichern (wird hier nur für den Body benötigt)
         let sharedContent = {}; 
+
+        // Schlüssel für LocalStorage
+        const STORAGE_KEY_NAME = 'plannerUserName';
+        const STORAGE_KEY_SLOTS = 'plannerAvailabilitySlots';
 
         /**
          * Berechnet das Datum des Ostersonntags für ein gegebenes Jahr (Y) 
@@ -484,8 +488,8 @@
         /**
          * Erstellt das HTML für die Datums-Auswahloptionen aus den ZUKÜNFTIGEN Daten.
          */
-        function createDateOptions() {
-            let options = '<option value="" disabled selected>Datum auswählen...</option>';
+        function createDateOptions(selectedValue = '') {
+            let options = '<option value="" disabled ' + (selectedValue ? '' : 'selected') + '>Datum auswählen...</option>';
             const futureDates = getFutureDates(); 
 
             futureDates.forEach(d => {
@@ -500,8 +504,9 @@
                     const dateObj = new Date(d.date + 'T00:00:00');
                     const weekday = dateObj.toLocaleDateString('de-DE', { weekday: 'short' }); 
                     const displayLabel = `${weekday} ${d.label}`;
+                    const selected = d.date === selectedValue ? 'selected' : '';
 
-                    options += `<option value="${d.date}">${displayLabel}</option>`;
+                    options += `<option value="${d.date}" ${selected}>${displayLabel}</option>`;
 
                     if (d.isGroupSeparator) {
                          // Fügt einen kleinen visuellen Trenner nach wichtigen Gruppen hinzu
@@ -517,11 +522,11 @@
 
 
         /**
-         * Fügt einen neuen Verfügbarkeits-Slot zum Container hinzu.
+         * Fügt einen neuen Verfügbarkeits-Slot zum Container hinzu, optional mit gespeicherten Werten.
          */
-        function addAvailabilitySlot() {
+        function addAvailabilitySlot(data = { date: '', start: '', end: '' }) {
             const container = document.getElementById('availabilityContainer');
-            const slotId = 'slot-' + Date.now();
+            const slotId = 'slot-' + Date.now() + Math.floor(Math.random() * 1000); // Zufälligkeit für IDs bei Reload
 
             // Bestimme die aktuellen Fokus-Farben
             let focusRingClass = 'focus:ring-secondary focus:border-secondary';
@@ -531,27 +536,30 @@
                 focusRingClass = 'focus:ring-spring-secondary focus:border-spring-secondary';
             }
             
+            // Fülle die Optionen mit den gespeicherten Werten
+            const dateOptions = createDateOptions(data.date);
+            
             const slotHtml = `
                 <div id="${slotId}" class="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col sm:flex-row gap-3 items-center">
                     
                     <div class="w-full sm:w-1/3">
                         <label class="block text-xs font-medium text-gray-500 mb-0.5">Tag auswählen</label>
-                        <select class="date-select w-full p-2 border border-gray-300 rounded-lg ${focusRingClass} transition duration-150" required>
-                            ${createDateOptions()}
+                        <select class="date-select w-full p-2 border border-gray-300 rounded-lg ${focusRingClass} transition duration-150" required onchange="saveData()">
+                            ${dateOptions}
                         </select>
                     </div>
 
                     <div class="w-full sm:w-1/4">
                         <label class="block text-xs font-medium text-gray-500 mb-0.5">Von</label>
-                        <input type="time" placeholder="Bitte wählen" value="" class="start-time w-full p-2 border border-gray-300 rounded-lg ${focusRingClass} transition duration-150" required>
+                        <input type="time" placeholder="Bitte wählen" value="${data.start}" class="start-time w-full p-2 border border-gray-300 rounded-lg ${focusRingClass} transition duration-150" required oninput="saveData()">
                     </div>
 
                     <div class="w-full sm:w-1/4">
                         <label class="block text-xs font-medium text-gray-500 mb-0.5">Bis</label>
-                        <input type="time" placeholder="Bitte wählen" value="" class="end-time w-full p-2 border border-gray-300 rounded-lg ${focusRingClass} transition duration-150" required>
+                        <input type="time" placeholder="Bitte wählen" value="${data.end}" class="end-time w-full p-2 border border-gray-300 rounded-lg ${focusRingClass} transition duration-150" required oninput="saveData()">
                     </div>
 
-                    <button onclick="removeAvailabilitySlot('${slotId}')"
+                    <button onclick="removeAvailabilitySlot('${slotId}'); saveData();"
                             class="w-full sm:w-auto p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-150 flex-shrink-0">
                         <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
@@ -565,6 +573,7 @@
 
             // FIX FÜR PROBLEM 1: Schließt das Dropdown auf dem Handy, indem der Fokus auf das nächste Feld verschoben wird
             selectElement.addEventListener('change', () => {
+                // saveData() wird bereits durch onchange aufgerufen
                 if (startTimeElement) {
                     startTimeElement.focus();
                 }
@@ -579,6 +588,78 @@
             if (element) {
                 element.remove();
             }
+        }
+
+        /**
+         * Speichert Name und Verfügbarkeit in LocalStorage.
+         */
+        function saveData() {
+            const userName = document.getElementById('userName').value.trim();
+            localStorage.setItem(STORAGE_KEY_NAME, userName);
+
+            const slots = document.getElementById('availabilityContainer').children;
+            const entries = [];
+            
+            Array.from(slots).forEach(slot => {
+                const dateElement = slot.querySelector('.date-select');
+                const startElement = slot.querySelector('.start-time');
+                const endElement = slot.querySelector('.end-time');
+                
+                entries.push({
+                    date: dateElement ? dateElement.value : '',
+                    start: startElement ? startElement.value : '',
+                    end: endElement ? endElement.value : ''
+                });
+            });
+
+            localStorage.setItem(STORAGE_KEY_SLOTS, JSON.stringify(entries));
+        }
+
+        /**
+         * Lädt Name und Verfügbarkeit aus LocalStorage und füllt das Formular.
+         */
+        function loadData() {
+            const savedName = localStorage.getItem(STORAGE_KEY_NAME);
+            const savedSlotsJson = localStorage.getItem(STORAGE_KEY_SLOTS);
+            
+            const container = document.getElementById('availabilityContainer');
+            container.innerHTML = ''; // Vorherige Slots entfernen (inkl. des initialen)
+
+            if (savedName) {
+                document.getElementById('userName').value = savedName;
+            }
+
+            if (savedSlotsJson) {
+                try {
+                    const savedSlots = JSON.parse(savedSlotsJson);
+                    if (savedSlots.length > 0) {
+                        savedSlots.forEach(slot => {
+                            // Fügt die Slots mit den gespeicherten Werten hinzu
+                            addAvailabilitySlot(slot); 
+                        });
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Fehler beim Parsen der gespeicherten Slots:", e);
+                }
+            }
+            
+            // Wenn nichts geladen wurde oder leer, füge den initialen Slot hinzu
+            addAvailabilitySlot(); 
+        }
+
+        /**
+         * Löscht die gespeicherten Daten aus LocalStorage.
+         */
+        function clearData() {
+            localStorage.removeItem(STORAGE_KEY_NAME);
+            localStorage.removeItem(STORAGE_KEY_SLOTS);
+            // Formular zurücksetzen (optional, da die Seite neu geladen werden kann)
+            document.getElementById('userName').value = '';
+            const container = document.getElementById('availabilityContainer');
+            container.innerHTML = '';
+            addAvailabilitySlot();
+            showMessage('Gespeicherte Daten erfolgreich gelöscht.', 'info');
         }
 
         /**
@@ -693,11 +774,11 @@
 
 
         /**
-         * Führt die Validierung durch und sendet den Inhalt direkt via WhatsApp.
+         * Führt die Validierung durch und sendet den Inhalt direkt via WhatsApp und fragt nach dem Löschen der Daten.
          */
         function sendViaWhatsApp() {
             // HIER DIE ZIELNUMMER EINFÜGEN (mit Ländervorwahl, ohne + oder 00)
-            const targetNumber = '4917684684365'; // <--- BITTE HIER DURCH DIE ECHTE NUMMER ERSETZEN (z.B. 491719876543)
+            const targetNumber = '491711234567'; // <--- BITTE HIER DURCH DIE ECHTE NUMMER ERSETZEN (z.B. 491719876543)
             
             const confirmationCheckbox = document.getElementById('mandatoryConfirmation');
             if (!confirmationCheckbox.checked) {
@@ -720,16 +801,24 @@
             // NEUER WhatsApp Link mit fester Nummer
             const whatsappLink = `https://wa.me/${targetNumber}?text=${body}`;
 
+            // Öffnet WhatsApp
             window.open(whatsappLink, '_blank', 'noopener,noreferrer');
             showMessage(`WhatsApp wird geöffnet. Die Nachricht geht direkt an die Nummer ${targetNumber}.`, 'success');
+
+            // --- NEUE SICHERHEITSABFRAGE ZUM LÖSCHEN ---
+            // Verzögerung, um dem Benutzer Zeit zu geben, WhatsApp zu öffnen, bevor die Abfrage kommt.
+            setTimeout(() => {
+                 if (confirm("Die Verfügbarkeit wurde gesendet. Möchten Sie die Daten aus dem Formular (lokaler Speicher) löschen, um eine neue Verfügbarkeit einzutragen?")) {
+                    clearData();
+                 }
+            }, 3000); 
         }
 
 
-        // Fügen Sie beim Laden der Seite einen initialen Slot hinzu
+        // Fügen Sie beim Laden der Seite einen initialen Slot hinzu und laden Sie die Daten
         window.onload = () => {
             applySeasonalStyles(); // Wende die saisonalen Styles an
-            addAvailabilitySlot();
-            document.getElementById('userName').focus();
+            loadData(); // Lade gespeicherte Daten
         };
 
     </script>
